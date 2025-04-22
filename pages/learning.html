@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 学习中心</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .tab-navigation {
+            display: flex;
+            justify-content: space-around;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+            padding-bottom: 5px;
+        }
+        
+        .tab-item {
+            padding: 10px 15px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--light-text);
+            position: relative;
+            cursor: pointer;
+        }
+        
+        .tab-item.active {
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+        
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -6px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background-color: var(--primary-color);
+            border-radius: 3px;
+        }
+        
+        .category-filters {
+            display: flex;
+            overflow-x: auto;
+            padding: 5px 0 15px 0;
+            margin-bottom: 10px;
+        }
+        
+        .filter-chip {
+            padding: 6px 15px;
+            border-radius: 20px;
+            background-color: #f0f2f5;
+            color: var(--text-color);
+            font-size: 13px;
+            margin-right: 10px;
+            white-space: nowrap;
+        }
+        
+        .filter-chip.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .learning-card {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            background-color: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            position: relative;
+        }
+        
+        .learning-image {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+        }
+        
+        .learning-content {
+            padding: 15px;
+        }
+        
+        .learning-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+        }
+        
+        .learning-description {
+            font-size: 14px;
+            color: var(--light-text);
+            margin: 0 0 10px 0;
+        }
+        
+        .learning-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .age-badge {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 3px 8px;
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            font-size: 11px;
+            font-weight: 500;
+            color: var(--primary-color);
+        }
+        
+        .progress-container {
+            height: 5px;
+            background-color: #f0f2f5;
+            border-radius: 3px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        
+        .progress-bar {
+            height: 100%;
+            background-color: var(--primary-color);
+        }
+        
+        .search-container {
+            position: relative;
+            margin-bottom: 20px;
+        }
+        
+        .search-bar {
+            display: flex;
+            background-color: #f0f2f5;
+            border-radius: 10px;
+            padding: 8px 15px;
+            align-items: center;
+        }
+        
+        .search-bar i {
+            color: var(--light-text);
+            margin-right: 10px;
+        }
+        
+        .search-input {
+            border: none;
+            background: transparent;
+            flex: 1;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .search-input::placeholder {
+            color: var(--light-text);
+        }
+        
+        .featured-card {
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            position: relative;
+            height: 180px;
+        }
+        
+        .featured-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .featured-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.8), transparent);
+            color: white;
+        }
+        
+        .featured-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+        }
+        
+        .featured-desc {
+            font-size: 13px;
+            opacity: 0.9;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="content">
+        <!-- Page Title -->
+        <h1 class="header">学习中心</h1>
+        
+        <!-- Search Bar -->
+        <div class="search-container">
+            <div class="search-bar">
+                <i class="fas fa-search"></i>
+                <input type="text" class="search-input" placeholder="搜索故事、儿歌、游戏">
+            </div>
+        </div>
+        
+        <!-- Featured Content -->
+        <div class="featured-card">
+            <img src="https://images.unsplash.com/photo-1535572290543-960a8046f5af?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" class="featured-image" alt="儿童节特辑">
+            <div class="featured-overlay">
+                <div class="featured-title">儿童节特辑：探索奇妙世界</div>
+                <div class="featured-desc">一起来听有趣的故事，学习新知识！</div>
+            </div>
+        </div>
+        
+        <!-- Tab Navigation -->
+        <div class="tab-navigation">
+            <div class="tab-item active">故事</div>
+            <div class="tab-item">儿歌</div>
+            <div class="tab-item">游戏</div>
+            <div class="tab-item">益智</div>
+        </div>
+        
+        <!-- Category Filters -->
+        <div class="category-filters">
+            <div class="filter-chip active">全部</div>
+            <div class="filter-chip">科普</div>
+            <div class="filter-chip">童话</div>
+            <div class="filter-chip">恐龙</div>
+            <div class="filter-chip">动物</div>
+            <div class="filter-chip">自然</div>
+            <div class="filter-chip">太空</div>
+        </div>
+        
+        <!-- Learning Content -->
+        <div class="learning-card">
+            <img src="https://images.unsplash.com/photo-1577922163914-ceb558b6a1a7?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" class="learning-image" alt="恐龙世界探险">
+            <div class="age-badge">3-6岁</div>
+            <div class="learning-content">
+                <h3 class="learning-title">恐龙世界探险</h3>
+                <p class="learning-description">和小智一起穿越时空，探索侏罗纪的奇妙世界</p>
+                <div class="learning-meta">
+                    <div><i class="far fa-clock"></i> 10集 · 总时长1小时</div>
+                    <div><i class="far fa-heart"></i> 1,243</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="learning-card">
+            <img src="https://images.unsplash.com/photo-1447023029226-ef8f6608fa15?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" class="learning-image" alt="海洋奇缘">
+            <div class="age-badge">4-8岁</div>
+            <div class="learning-content">
+                <h3 class="learning-title">海洋奇缘：探索深海世界</h3>
+                <p class="learning-description">深入海底，认识各种海洋生物，了解海洋保护</p>
+                <div class="learning-meta">
+                    <div><i class="far fa-clock"></i> 8集 · 总时长45分钟</div>
+                    <div><i class="far fa-heart"></i> 986</div>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar" style="width: 60%;"></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="learning-card">
+            <img src="https://images.unsplash.com/photo-1446776811953-b23d57bd21aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" class="learning-image" alt="太空冒险">
+            <div class="age-badge">5-8岁</div>
+            <div class="learning-content">
+                <h3 class="learning-title">太空冒险：宇宙探秘</h3>
+                <p class="learning-description">认识太阳系的行星，了解宇宙奥秘</p>
+                <div class="learning-meta">
+                    <div><i class="far fa-clock"></i> 12集 · 总时长1.5小时</div>
+                    <div><i class="far fa-heart"></i> 1,872</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="learning-card">
+            <img src="https://images.unsplash.com/photo-1544703432-78fe9ba21525?ixlib=rb-1.2.1&auto=format&fit=crop&w=750&q=80" class="learning-image" alt="动物朋友">
+            <div class="age-badge">3-6岁</div>
+            <div class="learning-content">
+                <h3 class="learning-title">动物朋友</h3>
+                <p class="learning-description">认识各种野生动物，了解它们的生活习性</p>
+                <div class="learning-meta">
+                    <div><i class="far fa-clock"></i> 15集 · 总时长2小时</div>
+                    <div><i class="far fa-heart"></i> 2,156</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-item" id="nav-home">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="nav-item active" id="nav-learning">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </div>
+        <div class="nav-item" id="nav-chat">
+            <i class="fas fa-comment-dots"></i>
+            <span>聊天</span>
+        </div>
+        <div class="nav-item" id="nav-profile">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </div>
+    </div>
+</body>
+</html> 

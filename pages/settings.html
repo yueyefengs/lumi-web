@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 设置</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .settings-header {
+            padding: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .settings-title {
+            font-size: 24px;
+            font-weight: 600;
+            margin: 0;
+        }
+        
+        .settings-section {
+            background-color: white;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+            background-color: rgba(74, 144, 226, 0.05);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .settings-item:last-child {
+            border-bottom: none;
+        }
+        
+        .settings-icon {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            color: var(--primary-color);
+        }
+        
+        .settings-info {
+            flex: 1;
+        }
+        
+        .settings-name {
+            font-size: 15px;
+            font-weight: 500;
+            margin-bottom: 3px;
+        }
+        
+        .settings-description {
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .settings-action {
+            display: flex;
+            align-items: center;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 46px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:focus + .toggle-slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+        
+        .settings-value {
+            font-size: 14px;
+            color: var(--light-text);
+            margin-right: 10px;
+        }
+        
+        .chevron {
+            color: var(--light-text);
+            font-size: 14px;
+        }
+        
+        .time-selector {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+        
+        .time-slot {
+            width: 60px;
+            text-align: center;
+        }
+        
+        .time-label {
+            font-size: 12px;
+            color: var(--light-text);
+            margin-bottom: 5px;
+        }
+        
+        .time-input {
+            width: 100%;
+            padding: 8px 0;
+            border: 1px solid var(--border-color);
+            border-radius: 5px;
+            text-align: center;
+            font-size: 14px;
+        }
+        
+        .range-container {
+            margin-top: 10px;
+        }
+        
+        .range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 5px;
+            border-radius: 5px;
+            background: #d3d3d3;
+            outline: none;
+            margin: 10px 0;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .range-values {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .version-info {
+            text-align: center;
+            padding: 20px;
+            font-size: 12px;
+            color: var(--light-text);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="content">
+        <div class="settings-header">
+            <h1 class="settings-title">设置</h1>
+        </div>
+        
+        <!-- Device Settings -->
+        <div class="settings-section">
+            <div class="section-header">设备管理</div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-robot"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">小智机器人</div>
+                    <div class="settings-description">已连接 • 电量 78%</div>
+                </div>
+                <div class="settings-action">
+                    <i class="fas fa-chevron-right chevron"></i>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">重新连接设备</div>
+                    <div class="settings-description">扫描蓝牙/Wi-Fi可用设备</div>
+                </div>
+                <div class="settings-action">
+                    <i class="fas fa-chevron-right chevron"></i>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-bolt"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">固件更新</div>
+                    <div class="settings-description">当前版本: v2.3.1</div>
+                </div>
+                <div class="settings-action">
+                    <div class="settings-value">最新</div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Parental Controls -->
+        <div class="settings-section">
+            <div class="section-header">家长控制</div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">使用时长限制</div>
+                    <div class="settings-description">每日允许的最长使用时间</div>
+                    <div class="time-selector">
+                        <div class="time-slot">
+                            <div class="time-label">小时</div>
+                            <input type="number" class="time-input" value="2" min="0" max="12">
+                        </div>
+                        <div class="time-slot">
+                            <div class="time-label">分钟</div>
+                            <input type="number" class="time-input" value="30" min="0" max="59">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">内容访问等级</div>
+                    <div class="settings-description">根据年龄限制内容访问</div>
+                    <div class="range-container">
+                        <input type="range" min="3" max="8" value="6" class="range-slider" id="age-range">
+                        <div class="range-values">
+                            <span>3岁</span>
+                            <span>8岁</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-filter"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">内容过滤关键词</div>
+                    <div class="settings-description">设置禁用词汇和主题</div>
+                </div>
+                <div class="settings-action">
+                    <i class="fas fa-chevron-right chevron"></i>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-ban"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">远程禁用</div>
+                    <div class="settings-description">一键临时关闭设备</div>
+                </div>
+                <div class="settings-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- General Settings -->
+        <div class="settings-section">
+            <div class="section-header">通用设置</div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">通知设置</div>
+                </div>
+                <div class="settings-action">
+                    <i class="fas fa-chevron-right chevron"></i>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">语言</div>
+                </div>
+                <div class="settings-action">
+                    <div class="settings-value">简体中文</div>
+                    <i class="fas fa-chevron-right chevron"></i>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">帮助与支持</div>
+                </div>
+                <div class="settings-action">
+                    <i class="fas fa-chevron-right chevron"></i>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-file-alt"></i>
+                </div>
+                <div class="settings-info">
+                    <div class="settings-name">隐私政策与用户协议</div>
+                </div>
+                <div class="settings-action">
+                    <i class="fas fa-chevron-right chevron"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="version-info">
+            小智App v1.0.3 (2025042201)<br>
+            ©2025 小智智能科技有限公司
+        </div>
+    </div>
+    
+    <!-- Navigation Bar -->
+    <div class="nav-bar">
+        <div class="nav-item" id="nav-home">
+            <i class="fas fa-home"></i>
+            <span>首页</span>
+        </div>
+        <div class="nav-item" id="nav-learning">
+            <i class="fas fa-book"></i>
+            <span>学习</span>
+        </div>
+        <div class="nav-item" id="nav-chat">
+            <i class="fas fa-comment-dots"></i>
+            <span>聊天</span>
+        </div>
+        <div class="nav-item" id="nav-profile">
+            <i class="fas fa-user"></i>
+            <span>我的</span>
+        </div>
+    </div>
+</body>
+</html> 

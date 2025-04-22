@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 高保真原型</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        body {
+            padding: 20px;
+        }
+        h1, h2 {
+            text-align: center;
+        }
+        .screens-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 40px;
+        }
+        .screen-wrapper {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .screen-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h1>小智App - 高保真原型</h1>
+    <h2>基于iPhone 15 Pro尺寸的UI设计</h2>
+    
+    <div class="screens-container">
+        <!-- Home Screen -->
+        <div class="screen-wrapper">
+            <div class="screen-title">首页</div>
+            <div class="iphone-container">
+                <div class="notch"></div>
+                <iframe src="pages/home.html" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+        
+        <!-- Profile Screen -->
+        <div class="screen-wrapper">
+            <div class="screen-title">个人中心</div>
+            <div class="iphone-container">
+                <div class="notch"></div>
+                <iframe src="pages/profile.html" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+        
+        <!-- Learning Screen -->
+        <div class="screen-wrapper">
+            <div class="screen-title">学习中心</div>
+            <div class="iphone-container">
+                <div class="notch"></div>
+                <iframe src="pages/learning.html" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+        
+        <!-- Chat Screen -->
+        <div class="screen-wrapper">
+            <div class="screen-title">智能聊天</div>
+            <div class="iphone-container">
+                <div class="notch"></div>
+                <iframe src="pages/chat.html" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+        
+        <!-- Settings Screen -->
+        <div class="screen-wrapper">
+            <div class="screen-title">设置</div>
+            <div class="iphone-container">
+                <div class="notch"></div>
+                <iframe src="pages/settings.html" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+        
+        <!-- Login Screen -->
+        <div class="screen-wrapper">
+            <div class="screen-title">登录</div>
+            <div class="iphone-container">
+                <div class="notch"></div>
+                <iframe src="pages/login.html" frameborder="0" width="100%" height="100%"></iframe>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Update time in status bars
+        function updateTime() {
+            const now = new Date();
+            const hours = now.getHours().toString().padStart(2, '0');
+            const minutes = now.getMinutes().toString().padStart(2, '0');
+            const timeString = `${hours}:${minutes}`;
+            
+            const frames = document.querySelectorAll('iframe');
+            frames.forEach(frame => {
+                frame.onload = function() {
+                    if (frame.contentDocument) {
+                        const timeElement = frame.contentDocument.querySelector('.status-bar .time');
+                        if (timeElement) {
+                            timeElement.textContent = timeString;
+                        }
+                    }
+                };
+            });
+        }
+        
+        setInterval(updateTime, 1000);
+        updateTime();
+    </script>
+</body>
+</html> 
