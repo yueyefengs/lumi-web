@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 家长控制</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .section-card {
+            background-color: white;
+            border-radius: 12px;
+            margin: 15px 0;
+            padding: 15px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--primary-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .section-title .icon {
+            width: 36px;
+            height: 36px;
+            background-color: rgba(74, 144, 226, 0.1);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            color: var(--primary-color);
+            font-size: 16px;
+        }
+        
+        .time-limit-container {
+            margin: 20px 0;
+        }
+        
+        .time-label {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+        }
+        
+        .time-inputs {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
+        
+        .time-input {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .time-input label {
+            font-size: 12px;
+            color: var(--light-text);
+            margin-bottom: 5px;
+        }
+        
+        .time-input input {
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 16px;
+            text-align: center;
+        }
+        
+        .apply-button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        
+        .toggle-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .toggle-container:last-child {
+            border-bottom: none;
+        }
+        
+        .toggle-label {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .toggle-description {
+            font-size: 12px;
+            color: var(--light-text);
+            margin-top: 5px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:focus + .slider {
+            box-shadow: 0 0 1px var(--primary-color);
+        }
+        
+        input:checked + .slider:before {
+            transform: translateX(26px);
+        }
+        
+        .range-container {
+            margin: 15px 0;
+        }
+        
+        .range-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        
+        .range-label {
+            font-size: 14px;
+            font-weight: 500;
+        }
+        
+        .range-value {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--primary-color);
+            background-color: rgba(74, 144, 226, 0.1);
+            padding: 4px 8px;
+            border-radius: 5px;
+        }
+        
+        .range-slider {
+            -webkit-appearance: none;
+            width: 100%;
+            height: 6px;
+            border-radius: 3px;
+            background: #e0e0e0;
+            outline: none;
+        }
+        
+        .range-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .range-ticks {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 5px;
+        }
+        
+        .range-tick {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .blocked-keywords {
+            background-color: #f8f8f8;
+            border-radius: 8px;
+            padding: 12px;
+            margin-top: 15px;
+        }
+        
+        .keyword-tag {
+            display: inline-block;
+            background-color: #e8e8e8;
+            border-radius: 20px;
+            padding: 5px 12px;
+            margin: 5px;
+            font-size: 14px;
+        }
+        
+        .keyword-tag i {
+            margin-left: 5px;
+            color: #999;
+            cursor: pointer;
+        }
+        
+        .add-keyword {
+            display: flex;
+            margin-top: 15px;
+        }
+        
+        .add-keyword input {
+            flex: 1;
+            padding: 12px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px 0 0 8px;
+            font-size: 14px;
+        }
+        
+        .add-keyword button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            padding: 0 15px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        
+        .emergency-button {
+            background-color: #e74c3c;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            width: 100%;
+            margin-top: 15px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .emergency-button i {
+            margin-right: 10px;
+            font-size: 18px;
+        }
+        
+        .pin-protection {
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .pin-info {
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 10px;
+        }
+        
+        .pin-input {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        
+        .pin-digit {
+            width: 40px;
+            height: 40px;
+            text-align: center;
+            font-size: 18px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background-color: #f8f8f8;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <div class="page-header">
+        <a href="javascript:history.back()" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">家长控制</div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content">
+        <!-- Time Limit Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <div class="icon"><i class="fas fa-clock"></i></div>
+                使用时间限制
+            </div>
+            
+            <div class="time-limit-container">
+                <div class="time-label">每日允许使用时长：</div>
+                <div class="time-inputs">
+                    <div class="time-input">
+                        <label>小时</label>
+                        <input type="number" value="2" min="0" max="12">
+                    </div>
+                    <div class="time-input">
+                        <label>分钟</label>
+                        <input type="number" value="30" min="0" max="59">
+                    </div>
+                </div>
+                
+                <div class="time-label">禁用时段：</div>
+                <div class="time-inputs">
+                    <div class="time-input">
+                        <label>开始时间</label>
+                        <input type="time" value="21:00">
+                    </div>
+                    <div class="time-input">
+                        <label>结束时间</label>
+                        <input type="time" value="07:00">
+                    </div>
+                </div>
+                
+                <button class="apply-button">应用设置</button>
+            </div>
+            
+            <div class="toggle-container">
+                <div>
+                    <div class="toggle-label">休息提醒</div>
+                    <div class="toggle-description">每使用30分钟自动提醒休息</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="toggle-container">
+                <div>
+                    <div class="toggle-label">周末放宽限制</div>
+                    <div class="toggle-description">周末和假日增加50%使用时间</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+        </div>
+        
+        <!-- Content Filter Section -->
+        <div class="section-card">
+            <div class="section-title">
+                <div class="icon"><i class="fas fa-filter"></i></div>
+                内容过滤
+            </div>
+            
+            <div class="range-container">
+                <div class="range-header">
+                    <div class="range-label">内容适龄等级</div>
+                    <div class="range-value">6岁</div>
+                </div>
+                <input type="range" min="3" max="8" value="6" class="range-slider" id="age-range">
+                <div class="range-ticks">
+                    <div class="range-tick">3岁</div>
+                    <div class="range-tick">4岁</div>
+                    <div class="range-tick">5岁</div>
+                    <div class="range-tick">6岁</div>
+                    <div class="range-tick">7岁</div>
+                    <div class="range-tick">8岁</div>
+                </div>
+            </div>
+            
+            <div class="toggle-container">
+                <div>
+                    <div class="toggle-label">自动内容过滤</div>
+                    <div class="toggle-description">基于年龄自动过滤不适宜内容</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="toggle-container">
+                <div>
+                    <div class="toggle-label">仅允许访问推荐内容</div>
+                    <div class="toggle-description">限制仅能访问精选内容</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox">
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="time-label">屏蔽关键词:</div>
+            <div class="blocked-keywords">
+                <div class="keyword-tag">暴力 <i class="fas fa-times"></i></div>
+                <div class="keyword-tag">打架 <i class="fas fa-times"></i></div>
+                <div class="keyword-tag">骂人 <i class="fas fa-times"></i></div>
+                <div class="keyword-tag">恐怖 <i class="fas fa-times"></i></div>
+            </div>
+            
+            <div class="add-keyword">
+                <input type="text" placeholder="添加新关键词">
+                <button>添加</button>
+            </div>
+        </div>
+        
+        <!-- Emergency Controls -->
+        <div class="section-card">
+            <div class="section-title">
+                <div class="icon"><i class="fas fa-shield-alt"></i></div>
+                紧急控制
+            </div>
+            
+            <div class="toggle-container">
+                <div>
+                    <div class="toggle-label">远程监控</div>
+                    <div class="toggle-description">家长可远程查看互动历史记录</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <div class="toggle-container">
+                <div>
+                    <div class="toggle-label">家长权限锁定</div>
+                    <div class="toggle-description">防止孩子修改控制设置</div>
+                </div>
+                <label class="toggle-switch">
+                    <input type="checkbox" checked>
+                    <span class="slider"></span>
+                </label>
+            </div>
+            
+            <button class="emergency-button">
+                <i class="fas fa-ban"></i>立即禁用设备（24小时）
+            </button>
+            
+            <div class="pin-protection">
+                <div class="pin-info">设置解锁PIN码（家长专用）</div>
+                <div class="pin-input">
+                    <input type="password" maxlength="1" class="pin-digit">
+                    <input type="password" maxlength="1" class="pin-digit">
+                    <input type="password" maxlength="1" class="pin-digit">
+                    <input type="password" maxlength="1" class="pin-digit">
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

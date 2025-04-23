@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 帮助中心</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .search-bar {
+            background-color: #f0f2f5;
+            border-radius: 10px;
+            margin: 15px;
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .search-bar i {
+            color: var(--light-text);
+            margin-right: 10px;
+        }
+        
+        .search-input {
+            border: none;
+            background: transparent;
+            font-size: 14px;
+            flex: 1;
+            color: var(--text-color);
+        }
+        
+        .search-input::placeholder {
+            color: var(--light-text);
+        }
+        
+        .help-categories {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 15px;
+            margin-bottom: 25px;
+        }
+        
+        .category-card {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 15px 10px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .category-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 25px;
+            background-color: #f0f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 10px;
+        }
+        
+        .category-icon i {
+            font-size: 24px;
+            color: var(--primary-color);
+        }
+        
+        .category-icon.purple {
+            background-color: #f5f0ff;
+        }
+        
+        .category-icon.purple i {
+            color: #7352cf;
+        }
+        
+        .category-icon.green {
+            background-color: #f0fff5;
+        }
+        
+        .category-icon.green i {
+            color: #3aaf75;
+        }
+        
+        .category-icon.orange {
+            background-color: #fff7f0;
+        }
+        
+        .category-icon.orange i {
+            color: #ff9500;
+        }
+        
+        .category-name {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 15px 15px;
+            color: var(--text-color);
+        }
+        
+        .faq-list {
+            margin: 0 15px;
+        }
+        
+        .faq-item {
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            margin-bottom: 12px;
+            overflow: hidden;
+        }
+        
+        .faq-question {
+            padding: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+        }
+        
+        .question-text {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-color);
+        }
+        
+        .faq-toggle {
+            color: var(--light-text);
+            transition: transform 0.3s;
+        }
+        
+        .faq-answer {
+            padding: 0 15px;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease-out, padding 0.3s ease;
+        }
+        
+        .faq-item.active .faq-toggle {
+            transform: rotate(180deg);
+            color: var(--primary-color);
+        }
+        
+        .faq-item.active .faq-answer {
+            padding: 0 15px 15px;
+            max-height: 300px;
+        }
+        
+        .answer-text {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--text-color);
+        }
+        
+        .contact-methods {
+            margin: 0 15px 20px;
+            background-color: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            padding: 15px;
+        }
+        
+        .contact-method {
+            display: flex;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f2f5;
+        }
+        
+        .contact-method:last-child {
+            border-bottom: none;
+        }
+        
+        .contact-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 20px;
+            background-color: #f0f7ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .contact-icon i {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+        
+        .contact-details {
+            flex: 1;
+        }
+        
+        .contact-title {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 3px;
+        }
+        
+        .contact-info {
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .support-hours {
+            text-align: center;
+            margin: 20px 15px;
+            font-size: 13px;
+            color: var(--light-text);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <div class="page-header">
+        <a href="javascript:history.back()" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">帮助中心</div>
+    </div>
+    
+    <!-- Search Bar -->
+    <div class="search-bar">
+        <i class="fas fa-search"></i>
+        <input type="text" class="search-input" placeholder="搜索帮助主题">
+    </div>
+    
+    <!-- Categories -->
+    <div class="help-categories">
+        <div class="category-card">
+            <div class="category-icon">
+                <i class="fas fa-user-circle"></i>
+            </div>
+            <div class="category-name">账号问题</div>
+        </div>
+        <div class="category-card">
+            <div class="category-icon purple">
+                <i class="fas fa-cog"></i>
+            </div>
+            <div class="category-name">设置帮助</div>
+        </div>
+        <div class="category-card">
+            <div class="category-icon green">
+                <i class="fas fa-shield-alt"></i>
+            </div>
+            <div class="category-name">家长控制</div>
+        </div>
+        <div class="category-card">
+            <div class="category-icon orange">
+                <i class="fas fa-robot"></i>
+            </div>
+            <div class="category-name">互动指南</div>
+        </div>
+        <div class="category-card">
+            <div class="category-icon purple">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="category-name">内容问题</div>
+        </div>
+        <div class="category-card">
+            <div class="category-icon green">
+                <i class="fas fa-sync"></i>
+            </div>
+            <div class="category-name">更新与错误</div>
+        </div>
+    </div>
+    
+    <!-- FAQ Section -->
+    <div class="section-title">常见问题</div>
+    <div class="faq-list">
+        <div class="faq-item active">
+            <div class="faq-question">
+                <div class="question-text">如何设置家长控制？</div>
+                <div class="faq-toggle">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="answer-text">
+                    在应用主页点击右下角"我的"，然后选择"设置"，进入"家长控制"页面。您可以在这里设置使用时间限制、内容过滤和应用锁定等功能。首次使用需要创建一个家长密码，用于保护这些设置不被孩子随意更改。
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <div class="question-text">如何修改孩子的年龄设置？</div>
+                <div class="faq-toggle">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="answer-text">
+                    在应用主页点击右下角"我的"，然后选择"设置"，进入"孩子资料"页面。在这里您可以修改孩子的基本信息，包括年龄。修改年龄后，应用推荐的内容会自动根据新的年龄段进行调整。
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <div class="question-text">小智可以同时支持多个孩子使用吗？</div>
+                <div class="faq-toggle">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="answer-text">
+                    可以。一个家长账号下可以添加多个孩子资料，每个孩子都有独立的使用记录和推荐内容。在主页顶部可以切换不同孩子的资料，或者在"设置"-"孩子资料"中添加新的孩子账户。
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <div class="question-text">如何查看孩子与小智的互动内容？</div>
+                <div class="faq-toggle">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="answer-text">
+                    在应用主页点击右上角的"历史记录"图标，或者在"我的"页面选择"聊天记录"，您可以查看孩子与小智的所有对话内容。记录按日期排序，并可以按类型（故事、问答、游戏等）进行筛选。
+                </div>
+            </div>
+        </div>
+        
+        <div class="faq-item">
+            <div class="faq-question">
+                <div class="question-text">应用内容是如何推荐的？</div>
+                <div class="faq-toggle">
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+            </div>
+            <div class="faq-answer">
+                <div class="answer-text">
+                    小智通过分析孩子的年龄、兴趣偏好和互动历史，智能推荐适合的内容。您也可以在"设置"-"兴趣偏好"中手动调整推荐类型。所有推荐内容都经过专业教育团队审核，确保适龄、有益、安全。
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Contact Section -->
+    <div class="section-title">联系客服</div>
+    <div class="contact-methods">
+        <div class="contact-method">
+            <div class="contact-icon">
+                <i class="fas fa-headset"></i>
+            </div>
+            <div class="contact-details">
+                <div class="contact-title">在线客服</div>
+                <div class="contact-info">工作日9:00-21:00，节假日9:00-18:00</div>
+            </div>
+        </div>
+        
+        <div class="contact-method">
+            <div class="contact-icon">
+                <i class="fas fa-phone"></i>
+            </div>
+            <div class="contact-details">
+                <div class="contact-title">电话支持</div>
+                <div class="contact-info">400-888-9999（工作日9:00-18:00）</div>
+            </div>
+        </div>
+        
+        <div class="contact-method">
+            <div class="contact-icon">
+                <i class="fas fa-envelope"></i>
+            </div>
+            <div class="contact-details">
+                <div class="contact-title">邮件支持</div>
+                <div class="contact-info">support@xiaozhi.com（24小时）</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="support-hours">
+        客服团队将在24小时内回复您的问题
+    </div>
+    
+    <script>
+        // FAQ展开/收起功能
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentNode;
+                item.classList.toggle('active');
+            });
+        });
+    </script>
+</body>
+</html> 

@@ -3,42 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>小智App - 设置</title>
+    <title>小智App - 常规设置</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
-        .settings-header {
+        .page-header {
+            display: flex;
+            align-items: center;
             padding: 15px;
-            margin-bottom: 10px;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
         }
         
-        .settings-title {
-            font-size: 24px;
+        .back-button {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 20px;
             font-weight: 600;
-            margin: 0;
+            flex: 1;
         }
         
-        .settings-section {
+        .settings-group {
             background-color: white;
             border-radius: 12px;
-            margin-bottom: 20px;
+            margin: 15px;
             overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
         }
         
-        .section-header {
-            padding: 15px;
-            font-size: 16px;
+        .settings-group-header {
+            padding: 12px 15px;
+            font-size: 14px;
             font-weight: 600;
-            color: var(--primary-color);
-            background-color: rgba(74, 144, 226, 0.05);
-            border-bottom: 1px solid var(--border-color);
+            color: var(--light-text);
+            background-color: #f9f9f9;
         }
         
         .settings-item {
             display: flex;
-            align-items: center;
             padding: 15px;
             border-bottom: 1px solid var(--border-color);
+            align-items: center;
         }
         
         .settings-item:last-child {
@@ -46,23 +58,63 @@
         }
         
         .settings-icon {
-            width: 24px;
-            height: 24px;
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: #f0f5ff;
             display: flex;
             align-items: center;
             justify-content: center;
             margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .settings-icon i {
+            font-size: 18px;
             color: var(--primary-color);
         }
         
-        .settings-info {
+        .settings-icon.purple {
+            background-color: #f5f0ff;
+        }
+        
+        .settings-icon.purple i {
+            color: #7352cf;
+        }
+        
+        .settings-icon.green {
+            background-color: #f0fff5;
+        }
+        
+        .settings-icon.green i {
+            color: #3aaf75;
+        }
+        
+        .settings-icon.yellow {
+            background-color: #fffbf0;
+        }
+        
+        .settings-icon.yellow i {
+            color: #f5a623;
+        }
+        
+        .settings-icon.red {
+            background-color: #fff0f0;
+        }
+        
+        .settings-icon.red i {
+            color: #ff3b30;
+        }
+        
+        .settings-content {
             flex: 1;
         }
         
-        .settings-name {
-            font-size: 15px;
+        .settings-title {
+            font-size: 16px;
             font-weight: 500;
-            margin-bottom: 3px;
+            color: var(--text-color);
+            margin-bottom: 4px;
         }
         
         .settings-description {
@@ -71,15 +123,15 @@
         }
         
         .settings-action {
-            display: flex;
-            align-items: center;
+            flex-shrink: 0;
+            margin-left: 15px;
         }
         
         .toggle-switch {
             position: relative;
             display: inline-block;
-            width: 46px;
-            height: 24px;
+            width: 48px;
+            height: 26px;
         }
         
         .toggle-switch input {
@@ -96,28 +148,24 @@
             right: 0;
             bottom: 0;
             background-color: #ccc;
-            transition: .4s;
-            border-radius: 24px;
+            transition: 0.4s;
+            border-radius: 26px;
         }
         
         .toggle-slider:before {
             position: absolute;
             content: "";
-            height: 20px;
-            width: 20px;
-            left: 2px;
-            bottom: 2px;
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
             background-color: white;
-            transition: .4s;
+            transition: 0.4s;
             border-radius: 50%;
         }
         
         input:checked + .toggle-slider {
             background-color: var(--primary-color);
-        }
-        
-        input:focus + .toggle-slider {
-            box-shadow: 0 0 1px var(--primary-color);
         }
         
         input:checked + .toggle-slider:before {
@@ -127,76 +175,261 @@
         .settings-value {
             font-size: 14px;
             color: var(--light-text);
-            margin-right: 10px;
-        }
-        
-        .chevron {
-            color: var(--light-text);
-            font-size: 14px;
-        }
-        
-        .time-selector {
             display: flex;
-            justify-content: space-between;
-            margin-top: 10px;
+            align-items: center;
         }
         
-        .time-slot {
-            width: 60px;
-            text-align: center;
-        }
-        
-        .time-label {
+        .chevron-right {
+            margin-left: 5px;
             font-size: 12px;
-            color: var(--light-text);
-            margin-bottom: 5px;
         }
         
-        .time-input {
+        .slider-container {
             width: 100%;
-            padding: 8px 0;
-            border: 1px solid var(--border-color);
-            border-radius: 5px;
-            text-align: center;
-            font-size: 14px;
+            padding: 0 15px;
+            margin-top: 5px;
         }
         
-        .range-container {
-            margin-top: 10px;
-        }
-        
-        .range-slider {
+        .slider {
             -webkit-appearance: none;
             width: 100%;
-            height: 5px;
-            border-radius: 5px;
-            background: #d3d3d3;
+            height: 4px;
+            background: #ddd;
             outline: none;
-            margin: 10px 0;
+            border-radius: 2px;
         }
         
-        .range-slider::-webkit-slider-thumb {
+        .slider::-webkit-slider-thumb {
             -webkit-appearance: none;
             appearance: none;
-            width: 20px;
-            height: 20px;
-            border-radius: 50%;
+            width: 18px;
+            height: 18px;
             background: var(--primary-color);
+            border-radius: 50%;
             cursor: pointer;
         }
         
-        .range-values {
+        .slider-labels {
             display: flex;
             justify-content: space-between;
+            margin-top: 5px;
             font-size: 12px;
             color: var(--light-text);
         }
         
-        .version-info {
+        .slider-value {
             text-align: center;
-            padding: 20px;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-top: 5px;
+        }
+        
+        .radio-group {
+            display: flex;
+            padding: 15px;
+            justify-content: space-between;
+        }
+        
+        .radio-option {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            width: 33%;
+        }
+        
+        .radio-button {
+            position: relative;
+            width: 60px;
+            height: 60px;
+            border-radius: 12px;
+            background-color: #f5f5f7;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 8px;
+            cursor: pointer;
+        }
+        
+        .radio-button.selected {
+            background-color: #e0e9ff;
+        }
+        
+        .radio-button.selected::after {
+            content: '';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: var(--primary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+        
+        .radio-button.selected::before {
+            content: '✓';
+            position: absolute;
+            top: -5px;
+            right: -5px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            z-index: 1;
+            font-size: 12px;
+        }
+        
+        .radio-button i {
+            font-size: 22px;
+            color: var(--text-color);
+        }
+        
+        .radio-button.selected i {
+            color: var(--primary-color);
+        }
+        
+        .radio-label {
+            font-size: 13px;
+            color: var(--text-color);
+            text-align: center;
+        }
+        
+        .color-options {
+            display: flex;
+            padding: 15px;
+            justify-content: space-between;
+        }
+        
+        .color-option {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            cursor: pointer;
+            position: relative;
+        }
+        
+        .color-option.selected::after {
+            content: '✓';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: white;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .color-blue {
+            background-color: #1a73e8;
+        }
+        
+        .color-purple {
+            background-color: #7352cf;
+        }
+        
+        .color-pink {
+            background-color: #e91e63;
+        }
+        
+        .color-green {
+            background-color: #3aaf75;
+        }
+        
+        .color-orange {
+            background-color: #f5a623;
+        }
+        
+        .color-red {
+            background-color: #ff3b30;
+        }
+        
+        .section-footer {
             font-size: 12px;
             color: var(--light-text);
+            padding: 10px 15px;
+            text-align: center;
+        }
+        
+        .storage-bar {
+            height: 8px;
+            background-color: #e0e0e0;
+            border-radius: 4px;
+            margin: 15px;
+            overflow: hidden;
+        }
+        
+        .storage-used {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 45%; /* 示例用途 */
+        }
+        
+        .storage-info {
+            display: flex;
+            justify-content: space-between;
+            padding: 0 15px;
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .storage-detail {
+            display: flex;
+            padding: 15px;
+            justify-content: space-between;
+        }
+        
+        .storage-type {
+            display: flex;
+            align-items: center;
+        }
+        
+        .storage-icon {
+            width: 24px;
+            height: 24px;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+        }
+        
+        .storage-icon i {
+            font-size: 14px;
+            color: white;
+        }
+        
+        .app-icon {
+            background-color: #1a73e8;
+        }
+        
+        .photo-icon {
+            background-color: #ff3b30;
+        }
+        
+        .document-icon {
+            background-color: #3aaf75;
+        }
+        
+        .cache-icon {
+            background-color: #f5a623;
+        }
+        
+        .storage-name {
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        .storage-size {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-color);
         }
     </style>
 </head>
@@ -211,117 +444,24 @@
         </div>
     </div>
     
-    <!-- Main Content Area -->
-    <div class="content">
-        <div class="settings-header">
-            <h1 class="settings-title">设置</h1>
-        </div>
-        
-        <!-- Device Settings -->
-        <div class="settings-section">
-            <div class="section-header">设备管理</div>
+    <!-- Header -->
+    <div class="page-header">
+        <a href="javascript:history.back()" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">常规设置</div>
+    </div>       
+        <!-- 隐私安全 -->
+        <div class="settings-group">
+            <div class="settings-group-header">隐私与安全</div>
             
             <div class="settings-item">
                 <div class="settings-icon">
-                    <i class="fas fa-robot"></i>
+                    <i class="fas fa-fingerprint"></i>
                 </div>
-                <div class="settings-info">
-                    <div class="settings-name">小智机器人</div>
-                    <div class="settings-description">已连接 • 电量 78%</div>
-                </div>
-                <div class="settings-action">
-                    <i class="fas fa-chevron-right chevron"></i>
-                </div>
-            </div>
-            
-            <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-wifi"></i>
-                </div>
-                <div class="settings-info">
-                    <div class="settings-name">重新连接设备</div>
-                    <div class="settings-description">扫描蓝牙/Wi-Fi可用设备</div>
-                </div>
-                <div class="settings-action">
-                    <i class="fas fa-chevron-right chevron"></i>
-                </div>
-            </div>
-            
-            <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-bolt"></i>
-                </div>
-                <div class="settings-info">
-                    <div class="settings-name">固件更新</div>
-                    <div class="settings-description">当前版本: v2.3.1</div>
-                </div>
-                <div class="settings-action">
-                    <div class="settings-value">最新</div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Parental Controls -->
-        <div class="settings-section">
-            <div class="section-header">家长控制</div>
-            
-            <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-clock"></i>
-                </div>
-                <div class="settings-info">
-                    <div class="settings-name">使用时长限制</div>
-                    <div class="settings-description">每日允许的最长使用时间</div>
-                    <div class="time-selector">
-                        <div class="time-slot">
-                            <div class="time-label">小时</div>
-                            <input type="number" class="time-input" value="2" min="0" max="12">
-                        </div>
-                        <div class="time-slot">
-                            <div class="time-label">分钟</div>
-                            <input type="number" class="time-input" value="30" min="0" max="59">
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-shield-alt"></i>
-                </div>
-                <div class="settings-info">
-                    <div class="settings-name">内容访问等级</div>
-                    <div class="settings-description">根据年龄限制内容访问</div>
-                    <div class="range-container">
-                        <input type="range" min="3" max="8" value="6" class="range-slider" id="age-range">
-                        <div class="range-values">
-                            <span>3岁</span>
-                            <span>8岁</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-filter"></i>
-                </div>
-                <div class="settings-info">
-                    <div class="settings-name">内容过滤关键词</div>
-                    <div class="settings-description">设置禁用词汇和主题</div>
-                </div>
-                <div class="settings-action">
-                    <i class="fas fa-chevron-right chevron"></i>
-                </div>
-            </div>
-            
-            <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-ban"></i>
-                </div>
-                <div class="settings-info">
-                    <div class="settings-name">远程禁用</div>
-                    <div class="settings-description">一键临时关闭设备</div>
+                <div class="settings-content">
+                    <div class="settings-title">应用锁</div>
+                    <div class="settings-description">使用密码或生物识别保护应用</div>
                 </div>
                 <div class="settings-action">
                     <label class="toggle-switch">
@@ -330,86 +470,202 @@
                     </label>
                 </div>
             </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon purple">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-title">应用权限</div>
+                    <div class="settings-description">管理应用访问您设备的权限</div>
+                </div>
+                <div class="settings-action">
+                    <div class="settings-value">
+                        <i class="fas fa-chevron-right chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon green">
+                    <i class="fas fa-user-shield"></i>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-title">隐私政策</div>
+                    <div class="settings-description">查看我们如何保护您的数据</div>
+                </div>
+                <div class="settings-action">
+                    <div class="settings-value">
+                        <i class="fas fa-chevron-right chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="settings-item">
+                <div class="settings-icon yellow">
+                    <i class="fas fa-cookie"></i>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-title">Cookie设置</div>
+                    <div class="settings-description">管理应用内Cookie使用</div>
+                </div>
+                <div class="settings-action">
+                    <div class="settings-value">
+                        <i class="fas fa-chevron-right chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="section-footer">
+                我们严格保护您的隐私，不会未经许可分享您的个人信息。
+            </div>
         </div>
         
-        <!-- General Settings -->
-        <div class="settings-section">
-            <div class="section-header">通用设置</div>
+        <!-- 语言设置 -->
+        <div class="settings-group">
+            <div class="settings-group-header">语言与地区</div>
             
             <div class="settings-item">
                 <div class="settings-icon">
-                    <i class="fas fa-bell"></i>
+                    <i class="fas fa-language"></i>
                 </div>
-                <div class="settings-info">
-                    <div class="settings-name">通知设置</div>
+                <div class="settings-content">
+                    <div class="settings-title">应用语言</div>
+                    <div class="settings-description">设置应用界面语言</div>
                 </div>
                 <div class="settings-action">
-                    <i class="fas fa-chevron-right chevron"></i>
+                    <div class="settings-value">
+                        简体中文 <i class="fas fa-chevron-right chevron-right"></i>
+                    </div>
                 </div>
             </div>
             
             <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-globe"></i>
+                <div class="settings-icon purple">
+                    <i class="fas fa-globe-asia"></i>
                 </div>
-                <div class="settings-info">
-                    <div class="settings-name">语言</div>
+                <div class="settings-content">
+                    <div class="settings-title">地区</div>
+                    <div class="settings-description">设置您所在的地区</div>
                 </div>
                 <div class="settings-action">
-                    <div class="settings-value">简体中文</div>
-                    <i class="fas fa-chevron-right chevron"></i>
+                    <div class="settings-value">
+                        中国 <i class="fas fa-chevron-right chevron-right"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 应用信息 -->
+        <div class="settings-group">
+            <div class="settings-group-header">关于应用</div>
+            
+            <div class="settings-item">
+                <div class="settings-icon">
+                    <i class="fas fa-info"></i>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-title">应用版本</div>
+                    <div class="settings-description">当前安装的应用版本</div>
+                </div>
+                <div class="settings-action">
+                    <div class="settings-value">V2.1.3</div>
                 </div>
             </div>
             
             <div class="settings-item">
-                <div class="settings-icon">
-                    <i class="fas fa-question-circle"></i>
-                </div>
-                <div class="settings-info">
-                    <div class="settings-name">帮助与支持</div>
-                </div>
-                <div class="settings-action">
-                    <i class="fas fa-chevron-right chevron"></i>
-                </div>
-            </div>
-            
-            <div class="settings-item">
-                <div class="settings-icon">
+                <div class="settings-icon purple">
                     <i class="fas fa-file-alt"></i>
                 </div>
-                <div class="settings-info">
-                    <div class="settings-name">隐私政策与用户协议</div>
+                <div class="settings-content">
+                    <div class="settings-title">使用条款</div>
+                    <div class="settings-description">查看使用条款和协议</div>
                 </div>
                 <div class="settings-action">
-                    <i class="fas fa-chevron-right chevron"></i>
+                    <div class="settings-value">
+                        <i class="fas fa-chevron-right chevron-right"></i>
+                    </div>
                 </div>
             </div>
-        </div>
-        
-        <div class="version-info">
-            小智App v1.0.3 (2025042201)<br>
-            ©2025 小智智能科技有限公司
+            
+            <div class="settings-item">
+                <div class="settings-icon green">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <div class="settings-content">
+                    <div class="settings-title">检查更新</div>
+                    <div class="settings-description">检查应用是否有新版本</div>
+                </div>
+                <div class="settings-action">
+                    <button id="check-update" style="background: none; border: none; color: var(--primary-color); font-weight: 500; cursor: pointer;">检查</button>
+                </div>
+            </div>
         </div>
     </div>
     
-    <!-- Navigation Bar -->
-    <div class="nav-bar">
-        <div class="nav-item" id="nav-home">
-            <i class="fas fa-home"></i>
-            <span>首页</span>
-        </div>
-        <div class="nav-item" id="nav-learning">
-            <i class="fas fa-book"></i>
-            <span>学习</span>
-        </div>
-        <div class="nav-item" id="nav-chat">
-            <i class="fas fa-comment-dots"></i>
-            <span>聊天</span>
-        </div>
-        <div class="nav-item" id="nav-profile">
-            <i class="fas fa-user"></i>
-            <span>我的</span>
-        </div>
-    </div>
+    <script>
+        // 字体大小滑块
+        const fontSizeSlider = document.getElementById('font-size-slider');
+        const fontSizeValue = document.querySelector('.slider-value');
+        
+        fontSizeSlider.addEventListener('input', function() {
+            const value = this.value;
+            let sizeText = '';
+            
+            switch(value) {
+                case '1':
+                    sizeText = '超小';
+                    break;
+                case '2':
+                    sizeText = '小';
+                    break;
+                case '3':
+                    sizeText = '标准 (默认)';
+                    break;
+                case '4':
+                    sizeText = '大';
+                    break;
+                case '5':
+                    sizeText = '超大';
+                    break;
+            }
+            
+            fontSizeValue.textContent = sizeText;
+        });
+        
+        // 主题色选择
+        const colorOptions = document.querySelectorAll('.color-option');
+        
+        colorOptions.forEach(option => {
+            option.addEventListener('click', function() {
+                // 移除之前的选中
+                document.querySelector('.color-option.selected').classList.remove('selected');
+                // 选中当前点击的颜色
+                this.classList.add('selected');
+            });
+        });
+        
+        // 清除缓存按钮
+        document.getElementById('clear-cache').addEventListener('click', function() {
+            // 模拟清除缓存
+            document.querySelector('.storage-detail:last-child .storage-size').textContent = '0.0GB';
+            alert('缓存已清除');
+        });
+        
+        // 检查更新按钮
+        document.getElementById('check-update').addEventListener('click', function() {
+            // 模拟检查更新
+            alert('您的应用已是最新版本');
+        });
+        
+        // 深色模式切换
+        document.getElementById('dark-mode-toggle').addEventListener('change', function() {
+            if (this.checked) {
+                document.documentElement.classList.add('dark-mode');
+            } else {
+                document.documentElement.classList.remove('dark-mode');
+            }
+        });
+    </script>
 </body>
 </html> 

@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 内容推荐</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .back-button {
+            margin-right: 15px;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            margin-right: 38px;
+        }
+        
+        .category-tabs {
+            display: flex;
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .category-tabs::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .category-tab {
+            padding: 8px 16px;
+            border-radius: 18px;
+            font-size: 14px;
+            margin-right: 8px;
+            white-space: nowrap;
+            background-color: #f5f7fa;
+            color: var(--text-color);
+        }
+        
+        .category-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .filter-bar {
+            display: flex;
+            padding: 12px 15px;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filter-label {
+            font-size: 14px;
+            color: var(--light-text);
+        }
+        
+        .filter-options {
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-option {
+            font-size: 14px;
+            color: var(--text-color);
+            margin-left: 15px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .filter-option i {
+            margin-left: 5px;
+            font-size: 12px;
+        }
+        
+        .recommendation-cards {
+            padding: 15px;
+        }
+        
+        .recommendation-card {
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .card-cover {
+            position: relative;
+            height: 160px;
+            overflow: hidden;
+        }
+        
+        .card-cover img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .card-tag {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .card-duration {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(0,0,0,0.6);
+            color: white;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .card-info {
+            padding: 15px;
+        }
+        
+        .card-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 0 0 5px 0;
+        }
+        
+        .card-meta {
+            display: flex;
+            font-size: 13px;
+            color: var(--light-text);
+            margin-bottom: 10px;
+        }
+        
+        .card-age {
+            margin-right: 15px;
+        }
+        
+        .card-description {
+            font-size: 14px;
+            color: var(--text-color);
+            line-height: 1.5;
+            margin: 0;
+        }
+        
+        .card-actions {
+            display: flex;
+            padding: 10px 15px;
+            border-top: 1px solid #f5f5f5;
+        }
+        
+        .card-btn {
+            flex: 1;
+            text-align: center;
+            padding: 8px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .card-btn.primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+        
+        .card-btn.secondary {
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            margin-right: 10px;
+        }
+        
+        .section-title {
+            font-size: 18px;
+            font-weight: 600;
+            margin: 20px 15px 15px;
+        }
+        
+        .activity-cards {
+            padding: 0 15px;
+            display: flex;
+            overflow-x: auto;
+            scrollbar-width: none;
+        }
+        
+        .activity-cards::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .activity-card {
+            flex: 0 0 140px;
+            margin-right: 12px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .activity-icon {
+            height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #f0f7ff;
+        }
+        
+        .activity-icon i {
+            font-size: 36px;
+            color: var(--primary-color);
+        }
+        
+        .activity-info {
+            padding: 10px;
+        }
+        
+        .activity-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin: 0 0 5px 0;
+        }
+        
+        .activity-meta {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <a href="home.html" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">内容推荐</div>
+    </div>
+    
+    <!-- Category Tabs -->
+    <div class="category-tabs">
+        <div class="category-tab active">全部</div>
+        <div class="category-tab">故事</div>
+        <div class="category-tab">知识</div>
+        <div class="category-tab">游戏</div>
+        <div class="category-tab">音乐</div>
+        <div class="category-tab">手工</div>
+        <div class="category-tab">英语</div>
+    </div>
+    
+    <!-- Filter Bar -->
+    <div class="filter-bar">
+        <div class="filter-label">筛选：</div>
+        <div class="filter-options">
+            <div class="filter-option">
+                年龄段 <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="filter-option">
+                时长 <i class="fas fa-chevron-down"></i>
+            </div>
+            <div class="filter-option">
+                推荐度 <i class="fas fa-chevron-down"></i>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Recommendation Cards -->
+    <div class="recommendation-cards">
+        <!-- Card 1 -->
+        <div class="recommendation-card">
+            <div class="card-cover">
+                <img src="https://via.placeholder.com/400x200" alt="动物百科">
+                <div class="card-tag">知识</div>
+                <div class="card-duration">15分钟</div>
+            </div>
+            <div class="card-info">
+                <h3 class="card-title">趣味动物百科：海洋动物篇</h3>
+                <div class="card-meta">
+                    <div class="card-age">适合年龄：5-8岁</div>
+                    <div class="card-popularity">98%的孩子喜欢</div>
+                </div>
+                <p class="card-description">探索神秘的海洋世界，认识各种有趣的海洋生物，了解它们的生活习性和特点。</p>
+            </div>
+            <div class="card-actions">
+                <div class="card-btn secondary">收藏</div>
+                <div class="card-btn primary">立即互动</div>
+            </div>
+        </div>
+        
+        <!-- Card 2 -->
+        <div class="recommendation-card">
+            <div class="card-cover">
+                <img src="https://via.placeholder.com/400x200" alt="童话故事">
+                <div class="card-tag">故事</div>
+                <div class="card-duration">10分钟</div>
+            </div>
+            <div class="card-info">
+                <h3 class="card-title">勇敢的小熊冒险记</h3>
+                <div class="card-meta">
+                    <div class="card-age">适合年龄：4-7岁</div>
+                    <div class="card-popularity">95%的孩子喜欢</div>
+                </div>
+                <p class="card-description">小熊勇敢走出家门，展开一段奇妙的森林冒险，结识新朋友并学会解决问题。</p>
+            </div>
+            <div class="card-actions">
+                <div class="card-btn secondary">收藏</div>
+                <div class="card-btn primary">立即互动</div>
+            </div>
+        </div>
+        
+        <!-- Card 3 -->
+        <div class="recommendation-card">
+            <div class="card-cover">
+                <img src="https://via.placeholder.com/400x200" alt="数学游戏">
+                <div class="card-tag">游戏</div>
+                <div class="card-duration">20分钟</div>
+            </div>
+            <div class="card-info">
+                <h3 class="card-title">数学魔法师挑战</h3>
+                <div class="card-meta">
+                    <div class="card-age">适合年龄：6-9岁</div>
+                    <div class="card-popularity">92%的孩子喜欢</div>
+                </div>
+                <p class="card-description">通过有趣的魔法世界冒险，解决数学谜题，培养计算能力和逻辑思维。</p>
+            </div>
+            <div class="card-actions">
+                <div class="card-btn secondary">收藏</div>
+                <div class="card-btn primary">立即互动</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Quick Activities Section -->
+    <h3 class="section-title">快速活动</h3>
+    <div class="activity-cards">
+        <!-- Activity 1 -->
+        <div class="activity-card">
+            <div class="activity-icon">
+                <i class="fas fa-question-circle"></i>
+            </div>
+            <div class="activity-info">
+                <h4 class="activity-title">猜谜语</h4>
+                <div class="activity-meta">5分钟</div>
+            </div>
+        </div>
+        
+        <!-- Activity 2 -->
+        <div class="activity-card">
+            <div class="activity-icon">
+                <i class="fas fa-music"></i>
+            </div>
+            <div class="activity-info">
+                <h4 class="activity-title">儿歌互动</h4>
+                <div class="activity-meta">10分钟</div>
+            </div>
+        </div>
+        
+        <!-- Activity 3 -->
+        <div class="activity-card">
+            <div class="activity-icon">
+                <i class="fas fa-paint-brush"></i>
+            </div>
+            <div class="activity-info">
+                <h4 class="activity-title">指导作画</h4>
+                <div class="activity-meta">15分钟</div>
+            </div>
+        </div>
+        
+        <!-- Activity 4 -->
+        <div class="activity-card">
+            <div class="activity-icon">
+                <i class="fas fa-globe"></i>
+            </div>
+            <div class="activity-info">
+                <h4 class="activity-title">简单英语</h4>
+                <div class="activity-meta">8分钟</div>
+            </div>
+        </div>
+        
+        <!-- Activity 5 -->
+        <div class="activity-card">
+            <div class="activity-icon">
+                <i class="fas fa-book"></i>
+            </div>
+            <div class="activity-info">
+                <h4 class="activity-title">讲故事</h4>
+                <div class="activity-meta">12分钟</div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

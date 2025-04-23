@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 角色设定</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: white;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-right: 15px;
+        }
+        
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .character-section {
+            background-color: white;
+            border-radius: 15px;
+            margin: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .section-header {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .character-preview {
+            display: flex;
+            padding: 20px;
+            align-items: center;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .character-avatar {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .character-avatar img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-edit {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: rgba(0,0,0,0.5);
+            color: white;
+            text-align: center;
+            padding: 4px 0;
+            font-size: 12px;
+        }
+        
+        .character-info {
+            flex: 1;
+        }
+        
+        .character-name {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .character-status {
+            font-size: 14px;
+            color: var(--light-text);
+        }
+        
+        .form-group {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .form-group:last-child {
+            border-bottom: none;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+        
+        .hint-text {
+            font-size: 12px;
+            color: var(--light-text);
+            margin-top: 8px;
+        }
+        
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .tag {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .tag .remove {
+            margin-left: 6px;
+            font-size: 12px;
+            cursor: pointer;
+        }
+        
+        .add-tag {
+            display: flex;
+            margin-top: 10px;
+        }
+        
+        .add-tag input {
+            flex: 1;
+            padding: 10px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px 0 0 8px;
+            font-size: 14px;
+        }
+        
+        .add-tag button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 0 8px 8px 0;
+            padding: 0 15px;
+            font-size: 14px;
+        }
+        
+        .preset-tags {
+            margin-top: 15px;
+        }
+        
+        .preset-label {
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 10px;
+        }
+        
+        .preset-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .preset-tag {
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 13px;
+            cursor: pointer;
+        }
+        
+        .preset-tag:hover {
+            background-color: var(--secondary-color);
+            color: var(--primary-color);
+        }
+        
+        .age-range {
+            padding: 15px 0;
+        }
+        
+        .age-slider {
+            width: 100%;
+            -webkit-appearance: none;
+            height: 5px;
+            border-radius: 5px;
+            background: var(--border-color);
+            outline: none;
+            margin: 15px 0;
+        }
+        
+        .age-slider::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background: var(--primary-color);
+            cursor: pointer;
+        }
+        
+        .age-display {
+            text-align: center;
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+        
+        .age-description {
+            text-align: center;
+            font-size: 14px;
+            color: var(--light-text);
+            margin-top: 5px;
+        }
+        
+        .btn-save {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 500;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <a href="profile.html" class="back-button">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <div class="page-title">角色设定</div>
+        </div>
+        
+        <!-- Character Preview Section -->
+        <div class="character-section">
+            <div class="character-preview">
+                <div class="character-avatar">
+                    <img src="../img/avatar-boy.png" alt="角色头像">
+                    <div class="avatar-edit">更换</div>
+                </div>
+                <div class="character-info">
+                    <div class="character-name">小明</div>
+                    <div class="character-status">10岁 · 小学四年级</div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">角色名称</label>
+                <input type="text" class="form-control" value="小明">
+                <div class="hint-text">这是AI助手将如何称呼你</div>
+            </div>
+        </div>
+        
+        <!-- Age Settings Section -->
+        <div class="character-section">
+            <div class="section-header">年龄设置</div>
+            
+            <div class="form-group">
+                <div class="age-range">
+                    <input type="range" min="3" max="18" value="10" class="age-slider" id="ageSlider">
+                    <div class="age-display">10岁</div>
+                    <div class="age-description">小学四年级</div>
+                </div>
+                <div class="hint-text">年龄设置将影响AI助手推荐的内容难度和交互方式</div>
+            </div>
+        </div>
+        
+        <!-- Interest Tags Section -->
+        <div class="character-section">
+            <div class="section-header">兴趣标签</div>
+            
+            <div class="form-group">
+                <label class="form-label">我的兴趣爱好</label>
+                <div class="tag-container">
+                    <div class="tag">科学 <span class="remove">×</span></div>
+                    <div class="tag">恐龙 <span class="remove">×</span></div>
+                    <div class="tag">宇宙 <span class="remove">×</span></div>
+                    <div class="tag">数学 <span class="remove">×</span></div>
+                    <div class="tag">足球 <span class="remove">×</span></div>
+                </div>
+                
+                <div class="add-tag">
+                    <input type="text" placeholder="添加新标签">
+                    <button>添加</button>
+                </div>
+                
+                <div class="preset-tags">
+                    <div class="preset-label">推荐标签</div>
+                    <div class="preset-container">
+                        <div class="preset-tag">历史</div>
+                        <div class="preset-tag">地理</div>
+                        <div class="preset-tag">故事</div>
+                        <div class="preset-tag">绘画</div>
+                        <div class="preset-tag">手工</div>
+                        <div class="preset-tag">编程</div>
+                        <div class="preset-tag">音乐</div>
+                        <div class="preset-tag">动物</div>
+                        <div class="preset-tag">植物</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Character Personality Section -->
+        <div class="character-section">
+            <div class="section-header">人设自定义</div>
+            
+            <div class="form-group">
+                <label class="form-label">性格特点</label>
+                <select class="form-control">
+                    <option value="outgoing">活泼外向</option>
+                    <option value="calm">冷静思考</option>
+                    <option value="curious">好奇探索</option>
+                    <option value="creative">富有创造力</option>
+                    <option value="humorous">幽默有趣</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">自定义人设描述</label>
+                <textarea class="form-control" placeholder="描述你希望AI助手了解的信息，比如你的爱好、特长、学习情况等">我是一个10岁的小学生，喜欢科学和足球，对恐龙和宇宙很感兴趣。我数学成绩不错，但是语文需要提高。我想了解更多关于恐龙的知识，也想学习更多科学实验。</textarea>
+                <div class="hint-text">这些信息将帮助AI助手更好地理解你，提供更个性化的互动体验</div>
+            </div>
+            
+            <div class="form-group">
+                <button class="btn-save">保存设置</button>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 简单的交互脚本
+        const ageSlider = document.getElementById('ageSlider');
+        const ageDisplay = document.querySelector('.age-display');
+        const ageDescription = document.querySelector('.age-description');
+        
+        const descriptions = {
+            3: '幼儿园小班',
+            4: '幼儿园中班',
+            5: '幼儿园大班',
+            6: '小学一年级',
+            7: '小学二年级',
+            8: '小学三年级',
+            9: '小学四年级',
+            10: '小学四年级',
+            11: '小学五年级',
+            12: '小学六年级',
+            13: '初中一年级',
+            14: '初中二年级',
+            15: '初中三年级',
+            16: '高中一年级',
+            17: '高中二年级',
+            18: '高中三年级'
+        };
+        
+        ageSlider.addEventListener('input', function() {
+            const age = this.value;
+            ageDisplay.textContent = `${age}岁`;
+            ageDescription.textContent = descriptions[age] || '';
+        });
+    </script>
+</body>
+</html> 

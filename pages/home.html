@@ -41,26 +41,6 @@
             margin-right: 5px;
         }
         
-        .device-controls {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            display: flex;
-            gap: 10px;
-        }
-        
-        .control-button {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            background-color: rgba(255, 255, 255, 0.2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-        }
-        
         .usage-stats {
             display: flex;
             justify-content: space-between;
@@ -132,6 +112,11 @@
         .see-all {
             color: var(--primary-color);
             font-size: 14px;
+            text-decoration: none;
+        }
+        
+        .see-all:hover {
+            text-decoration: underline;
         }
         
         .activity-card, .content-card {
@@ -248,6 +233,37 @@
         .search-input::placeholder {
             color: var(--light-text);
         }
+        
+        .navbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 12px 0 30px;
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            z-index: 100;
+        }
+        
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--light-text);
+            text-decoration: none;
+            font-size: 10px;
+        }
+        
+        .nav-item i {
+            font-size: 22px;
+            margin-bottom: 4px;
+        }
+        
+        .nav-item.active {
+            color: var(--primary-color);
+        }
     </style>
 </head>
 <body>
@@ -271,15 +287,6 @@
                 <i class="fas fa-circle"></i> 已连接 · 电量 78%
             </div>
             
-            <div class="device-controls">
-                <div class="control-button">
-                    <i class="fas fa-pause"></i>
-                </div>
-                <div class="control-button">
-                    <i class="fas fa-volume-mute"></i>
-                </div>
-            </div>
-            
             <div class="usage-stats">
                 <div class="usage-item">
                     <div class="value">1:42</div>
@@ -294,47 +301,25 @@
         
         <!-- Quick Actions -->
         <div class="quick-actions">
-            <div class="action-button">
+            <a href="chat-history.html" class="action-button">
                 <div class="action-icon">
                     <i class="fas fa-history"></i>
                 </div>
                 <div class="action-text">聊天记录</div>
-            </div>
-            <div class="action-button">
+            </a>
+            <a href="parental-control.html" class="action-button">
                 <div class="action-icon">
                     <i class="fas fa-shield-alt"></i>
                 </div>
                 <div class="action-text">家长控制</div>
-            </div>
+            </a>
         </div>
         
         <!-- Recent Activity -->
         <div class="activity-section">
             <div class="section-header">
-                <div class="section-title">今日互动</div>
-                <div class="see-all">查看全部</div>
-            </div>
-            
-            <div class="activity-card">
-                <div class="activity-icon">
-                    <i class="fas fa-comment-dots"></i>
-                </div>
-                <div class="activity-info">
-                    <h3 class="activity-title">AI助手对话</h3>
-                    <p class="activity-subtitle">小明询问了关于恐龙的知识</p>
-                    <div class="activity-time">30分钟前</div>
-                </div>
-            </div>
-            
-            <div class="activity-card">
-                <div class="activity-icon">
-                    <i class="fas fa-music"></i>
-                </div>
-                <div class="activity-info">
-                    <h3 class="activity-title">听儿歌</h3>
-                    <p class="activity-subtitle">播放了3首儿歌，总时长12分钟</p>
-                    <div class="activity-time">1小时前</div>
-                </div>
+                <div class="section-title">近期活动</div>
+                <a href="interaction-details.html" class="see-all">查看全部</a>
             </div>
             
             <div class="activity-card">
@@ -342,9 +327,20 @@
                     <i class="fas fa-book"></i>
                 </div>
                 <div class="activity-info">
-                    <h3 class="activity-title">故事学习</h3>
-                    <p class="activity-subtitle">《小雷龙的大冒险》第2集</p>
-                    <div class="activity-time">2小时前</div>
+                    <h3 class="activity-title">童话故事时间</h3>
+                    <p class="activity-subtitle">听了《小红帽》的故事</p>
+                    <div class="activity-time">15分钟前</div>
+                </div>
+            </div>
+            
+            <div class="activity-card">
+                <div class="activity-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="activity-info">
+                    <h3 class="activity-title">动物知识问答</h3>
+                    <p class="activity-subtitle">了解了长颈鹿的生活习性</p>
+                    <div class="activity-time">昨天</div>
                 </div>
             </div>
         </div>
@@ -352,8 +348,8 @@
         <!-- Content Library Preview -->
         <div class="content-section">
             <div class="section-header">
-                <div class="section-title">内容推荐</div>
-                <div class="see-all">查看全部</div>
+                <div class="section-title">推荐内容</div>
+                <a href="content-recommendations.html" class="see-all">更多推荐</a>
             </div>
             
             <div class="content-card">
@@ -382,24 +378,24 @@
         </div>
     </div>
     
-    <!-- Navigation Bar -->
-    <div class="nav-bar">
-        <div class="nav-item active" id="nav-home">
+    <!-- Bottom Navigation Bar -->
+    <div class="navbar">
+        <a href="home.html" class="nav-item active">
             <i class="fas fa-home"></i>
             <span>首页</span>
-        </div>
-        <div class="nav-item" id="nav-learning">
-            <i class="fas fa-book"></i>
-            <span>学习</span>
-        </div>
-        <div class="nav-item" id="nav-chat">
-            <i class="fas fa-comment-dots"></i>
+        </a>
+        <a href="chat.html" class="nav-item">
+            <i class="fas fa-comment"></i>
             <span>聊天</span>
-        </div>
-        <div class="nav-item" id="nav-profile">
+        </a>
+        <a href="content-recommendations.html" class="nav-item">
+            <i class="fas fa-compass"></i>
+            <span>发现</span>
+        </a>
+        <a href="profile.html" class="nav-item">
             <i class="fas fa-user"></i>
             <span>我的</span>
-        </div>
+        </a>
     </div>
 </body>
 </html> 

@@ -1,0 +1,623 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 连接设置</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .connection-group {
+            background-color: white;
+            border-radius: 12px;
+            margin: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .connection-group-header {
+            padding: 12px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--light-text);
+            background-color: #f9f9f9;
+        }
+        
+        .connection-item {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+        
+        .connection-item:last-child {
+            border-bottom: none;
+        }
+        
+        .connection-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: #f0f5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .connection-icon i {
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+        
+        .connection-icon.purple {
+            background-color: #f5f0ff;
+        }
+        
+        .connection-icon.purple i {
+            color: #7352cf;
+        }
+        
+        .connection-icon.green {
+            background-color: #f0fff5;
+        }
+        
+        .connection-icon.green i {
+            color: #3aaf75;
+        }
+        
+        .connection-icon.yellow {
+            background-color: #fffbf0;
+        }
+        
+        .connection-icon.yellow i {
+            color: #f5a623;
+        }
+        
+        .connection-content {
+            flex: 1;
+        }
+        
+        .connection-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .connection-description {
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .connection-action {
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+        
+        .device-list {
+            padding: 0;
+            margin: 0;
+            list-style: none;
+        }
+        
+        .device-item {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .device-status {
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 12px;
+        }
+        
+        .device-status.connected {
+            background-color: #3aaf75;
+        }
+        
+        .device-status.available {
+            background-color: #f5a623;
+        }
+        
+        .device-info {
+            flex: 1;
+        }
+        
+        .device-name {
+            font-size: 15px;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 2px;
+        }
+        
+        .device-type {
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .device-action {
+            display: flex;
+            align-items: center;
+        }
+        
+        .btn-connect {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .btn-disconnect {
+            background-color: #f2f2f7;
+            color: var(--text-color);
+            border: none;
+            border-radius: 15px;
+            padding: 5px 12px;
+            font-size: 12px;
+            font-weight: 500;
+            cursor: pointer;
+        }
+        
+        .device-signal {
+            display: flex;
+            align-items: center;
+            margin-right: 8px;
+        }
+        
+        .signal-bar {
+            width: 3px;
+            height: 10px;
+            background-color: #ccc;
+            margin-right: 2px;
+            border-radius: 1px;
+        }
+        
+        .signal-bar.active {
+            background-color: #3aaf75;
+        }
+        
+        .scanning-animation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px 0;
+        }
+        
+        .scanning-circle {
+            position: relative;
+            width: 50px;
+            height: 50px;
+        }
+        
+        .scanning-circle::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            border: 2px solid var(--primary-color);
+            animation: pulse 2s infinite;
+        }
+        
+        .scanning-circle::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            top: 15px;
+            left: 15px;
+            background-color: var(--primary-color);
+            border-radius: 50%;
+        }
+        
+        .scanning-text {
+            margin-left: 15px;
+            font-size: 14px;
+            color: var(--text-color);
+        }
+        
+        @keyframes pulse {
+            0% {
+                transform: scale(0.5);
+                opacity: 1;
+            }
+            100% {
+                transform: scale(1.5);
+                opacity: 0;
+            }
+        }
+        
+        .network-status {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: #f0f5ff;
+            border-radius: 8px;
+            margin: 15px;
+        }
+        
+        .network-status-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .network-status-icon i {
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+        
+        .network-status-content {
+            flex: 1;
+        }
+        
+        .network-status-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .network-status-info {
+            font-size: 13px;
+            color: var(--light-text);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <div class="page-header">
+        <a href="javascript:history.back()" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">连接设置</div>
+    </div>
+    
+    <!-- Network Status -->
+    <div class="network-status">
+        <div class="network-status-icon">
+            <i class="fas fa-wifi"></i>
+        </div>
+        <div class="network-status-content">
+            <div class="network-status-title">已连接 WiFi</div>
+            <div class="network-status-info">家庭网络 (192.168.1.105)</div>
+        </div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content">
+        <!-- 蓝牙连接 -->
+        <div class="connection-group">
+            <div class="connection-group-header">蓝牙设置</div>
+            
+            <div class="connection-item">
+                <div class="connection-icon">
+                    <i class="fab fa-bluetooth-b"></i>
+                </div>
+                <div class="connection-content">
+                    <div class="connection-title">蓝牙</div>
+                    <div class="connection-description">打开或关闭蓝牙连接</div>
+                </div>
+                <div class="connection-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="bluetooth-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div id="bluetooth-settings">
+                <div class="connection-item">
+                    <div class="connection-icon green">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <div class="connection-content">
+                        <div class="connection-title">设备可被发现</div>
+                        <div class="connection-description">允许其他设备找到你的小智</div>
+                    </div>
+                    <div class="connection-action">
+                        <label class="toggle-switch">
+                            <input type="checkbox" checked>
+                            <span class="toggle-slider"></span>
+                        </label>
+                    </div>
+                </div>
+                
+                <div class="scanning-animation">
+                    <div class="scanning-circle"></div>
+                    <div class="scanning-text">正在搜索附近设备...</div>
+                </div>
+                
+                <div class="connection-group-header">已连接设备</div>
+                <ul class="device-list">
+                    <li class="device-item">
+                        <div class="device-status connected"></div>
+                        <div class="device-info">
+                            <div class="device-name">小智机器人</div>
+                            <div class="device-type">智能玩具</div>
+                        </div>
+                        <div class="device-action">
+                            <div class="device-signal">
+                                <div class="signal-bar active"></div>
+                                <div class="signal-bar active"></div>
+                                <div class="signal-bar active"></div>
+                                <div class="signal-bar active"></div>
+                            </div>
+                            <button class="btn-disconnect">断开</button>
+                        </div>
+                    </li>
+                </ul>
+                
+                <div class="connection-group-header">可用设备</div>
+                <ul class="device-list">
+                    <li class="device-item">
+                        <div class="device-status available"></div>
+                        <div class="device-info">
+                            <div class="device-name">小智智能音箱</div>
+                            <div class="device-type">智能音箱</div>
+                        </div>
+                        <div class="device-action">
+                            <div class="device-signal">
+                                <div class="signal-bar active"></div>
+                                <div class="signal-bar active"></div>
+                                <div class="signal-bar"></div>
+                                <div class="signal-bar"></div>
+                            </div>
+                            <button class="btn-connect">连接</button>
+                        </div>
+                    </li>
+                    <li class="device-item">
+                        <div class="device-status available"></div>
+                        <div class="device-info">
+                            <div class="device-name">智能手表</div>
+                            <div class="device-type">穿戴设备</div>
+                        </div>
+                        <div class="device-action">
+                            <div class="device-signal">
+                                <div class="signal-bar active"></div>
+                                <div class="signal-bar"></div>
+                                <div class="signal-bar"></div>
+                                <div class="signal-bar"></div>
+                            </div>
+                            <button class="btn-connect">连接</button>
+                        </div>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        
+        <!-- 网络连接 -->
+        <div class="connection-group">
+            <div class="connection-group-header">网络设置</div>
+            
+            <div class="connection-item">
+                <div class="connection-icon purple">
+                    <i class="fas fa-wifi"></i>
+                </div>
+                <div class="connection-content">
+                    <div class="connection-title">WiFi</div>
+                    <div class="connection-description">打开或关闭WiFi连接</div>
+                </div>
+                <div class="connection-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="wifi-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="connection-item">
+                <div class="connection-icon yellow">
+                    <i class="fas fa-signal"></i>
+                </div>
+                <div class="connection-content">
+                    <div class="connection-title">移动数据</div>
+                    <div class="connection-description">使用移动网络连接</div>
+                </div>
+                <div class="connection-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 高级设置 -->
+        <div class="connection-group">
+            <div class="connection-group-header">高级设置</div>
+            
+            <div class="connection-item">
+                <div class="connection-icon">
+                    <i class="fas fa-download"></i>
+                </div>
+                <div class="connection-content">
+                    <div class="connection-title">自动更新</div>
+                    <div class="connection-description">自动下载并安装更新</div>
+                </div>
+                <div class="connection-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="connection-item">
+                <div class="connection-icon green">
+                    <i class="fas fa-cloud-download-alt"></i>
+                </div>
+                <div class="connection-content">
+                    <div class="connection-title">仅WiFi下载</div>
+                    <div class="connection-description">仅在WiFi环境下下载内容</div>
+                </div>
+                <div class="connection-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="connection-item">
+                <div class="connection-icon purple">
+                    <i class="fas fa-save"></i>
+                </div>
+                <div class="connection-content">
+                    <div class="connection-title">离线内容</div>
+                    <div class="connection-description">下载内容供离线使用</div>
+                </div>
+                <div class="connection-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // 蓝牙切换逻辑
+        document.getElementById('bluetooth-toggle').addEventListener('change', function() {
+            const bluetoothSettings = document.getElementById('bluetooth-settings');
+            if (this.checked) {
+                bluetoothSettings.style.display = 'block';
+            } else {
+                bluetoothSettings.style.display = 'none';
+            }
+        });
+        
+        // 连接按钮交互
+        document.querySelectorAll('.btn-connect').forEach(button => {
+            button.addEventListener('click', function() {
+                const deviceItem = this.closest('.device-item');
+                const deviceStatus = deviceItem.querySelector('.device-status');
+                
+                deviceStatus.classList.remove('available');
+                deviceStatus.classList.add('connected');
+                
+                this.textContent = '断开';
+                this.classList.remove('btn-connect');
+                this.classList.add('btn-disconnect');
+                
+                // 模拟信号增强
+                const signalBars = deviceItem.querySelectorAll('.signal-bar');
+                signalBars.forEach(bar => bar.classList.add('active'));
+            });
+        });
+        
+        // 断开按钮交互
+        document.querySelectorAll('.btn-disconnect').forEach(button => {
+            button.addEventListener('click', function() {
+                const deviceItem = this.closest('.device-item');
+                const deviceStatus = deviceItem.querySelector('.device-status');
+                
+                deviceStatus.classList.remove('connected');
+                deviceStatus.classList.add('available');
+                
+                this.textContent = '连接';
+                this.classList.remove('btn-disconnect');
+                this.classList.add('btn-connect');
+                
+                // 模拟信号减弱
+                const signalBars = deviceItem.querySelectorAll('.signal-bar');
+                signalBars[2].classList.remove('active');
+                signalBars[3].classList.remove('active');
+            });
+        });
+    </script>
+</body>
+</html> 

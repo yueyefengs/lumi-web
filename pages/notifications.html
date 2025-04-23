@@ -1,0 +1,491 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 通知设置</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .notification-group {
+            background-color: white;
+            border-radius: 12px;
+            margin: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        
+        .notification-group-header {
+            padding: 12px 15px;
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--light-text);
+            background-color: #f9f9f9;
+        }
+        
+        .notification-item {
+            display: flex;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            align-items: center;
+        }
+        
+        .notification-item:last-child {
+            border-bottom: none;
+        }
+        
+        .notification-icon {
+            width: 36px;
+            height: 36px;
+            border-radius: 8px;
+            background-color: #f0f5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .notification-icon i {
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+        
+        .notification-icon.purple {
+            background-color: #f5f0ff;
+        }
+        
+        .notification-icon.purple i {
+            color: #7352cf;
+        }
+        
+        .notification-icon.green {
+            background-color: #f0fff5;
+        }
+        
+        .notification-icon.green i {
+            color: #3aaf75;
+        }
+        
+        .notification-icon.yellow {
+            background-color: #fffbf0;
+        }
+        
+        .notification-icon.yellow i {
+            color: #f5a623;
+        }
+        
+        .notification-content {
+            flex: 1;
+        }
+        
+        .notification-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: var(--text-color);
+            margin-bottom: 4px;
+        }
+        
+        .notification-description {
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .notification-action {
+            flex-shrink: 0;
+            margin-left: 15px;
+        }
+        
+        .toggle-switch {
+            position: relative;
+            display: inline-block;
+            width: 48px;
+            height: 26px;
+        }
+        
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: 0.4s;
+            border-radius: 26px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            transition: 0.4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(22px);
+        }
+        
+        .notification-time {
+            display: flex;
+            flex-direction: column;
+            margin-left: 51px;
+            padding: 0 15px 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .time-option {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .time-option label {
+            display: flex;
+            align-items: center;
+            font-size: 14px;
+            color: var(--text-color);
+            margin-right: 20px;
+        }
+        
+        .time-option input[type="radio"] {
+            margin-right: 6px;
+        }
+        
+        .time-custom-select {
+            display: flex;
+            align-items: center;
+            margin-top: 10px;
+        }
+        
+        .time-select {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid var(--border-color);
+            background-color: white;
+            font-size: 14px;
+            color: var(--text-color);
+            margin-right: 10px;
+        }
+        
+        .time-label {
+            font-size: 14px;
+            color: var(--text-color);
+            margin: 0 5px;
+        }
+        
+        .explanation {
+            padding: 15px;
+            font-size: 13px;
+            line-height: 1.5;
+            color: var(--light-text);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <div class="page-header">
+        <a href="javascript:history.back()" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">通知设置</div>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="content">
+        <!-- 总开关 -->
+        <div class="notification-group">
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-bell"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">通知开关</div>
+                    <div class="notification-description">打开或关闭所有通知</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="master-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 互动通知 -->
+        <div class="notification-group">
+            <div class="notification-group-header">互动通知</div>
+            
+            <div class="notification-item">
+                <div class="notification-icon green">
+                    <i class="fas fa-comment-dots"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">对话回复</div>
+                    <div class="notification-description">小智回复你的提问时通知</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon purple">
+                    <i class="fas fa-heart"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">互动提醒</div>
+                    <div class="notification-description">当小智需要你的回应时通知</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon yellow">
+                    <i class="fas fa-gift"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">活动奖励</div>
+                    <div class="notification-description">获得活动或任务奖励时通知</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 学习通知 -->
+        <div class="notification-group">
+            <div class="notification-group-header">学习通知</div>
+            
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">学习提醒</div>
+                    <div class="notification-description">日常学习计划和进度提醒</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked id="study-toggle">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <!-- 特定时间 -->
+            <div class="notification-time">
+                <div class="time-option">
+                    <label>
+                        <input type="radio" name="time" value="auto" checked> 自动推荐时间
+                    </label>
+                    <label>
+                        <input type="radio" name="time" value="custom"> 自定义时间
+                    </label>
+                </div>
+                <div class="time-custom-select">
+                    <select class="time-select">
+                        <option>07:00</option>
+                        <option>08:00</option>
+                        <option>09:00</option>
+                        <option>10:00</option>
+                        <option>11:00</option>
+                        <option>12:00</option>
+                        <option>13:00</option>
+                        <option>14:00</option>
+                        <option>15:00</option>
+                        <option>16:00</option>
+                        <option>17:00</option>
+                        <option>18:00</option>
+                        <option>19:00</option>
+                    </select>
+                    <span class="time-label">至</span>
+                    <select class="time-select">
+                        <option>08:00</option>
+                        <option>09:00</option>
+                        <option>10:00</option>
+                        <option>11:00</option>
+                        <option>12:00</option>
+                        <option>13:00</option>
+                        <option>14:00</option>
+                        <option>15:00</option>
+                        <option>16:00</option>
+                        <option>17:00</option>
+                        <option selected>18:00</option>
+                        <option>19:00</option>
+                        <option>20:00</option>
+                    </select>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon green">
+                    <i class="fas fa-graduation-cap"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">知识更新</div>
+                    <div class="notification-description">基于兴趣推荐新内容</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon purple">
+                    <i class="fas fa-trophy"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">成就提醒</div>
+                    <div class="notification-description">学习目标完成和成就解锁</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 系统通知 -->
+        <div class="notification-group">
+            <div class="notification-group-header">系统通知</div>
+            
+            <div class="notification-item">
+                <div class="notification-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">安全提醒</div>
+                    <div class="notification-description">账号安全和隐私保护</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon green">
+                    <i class="fas fa-sync-alt"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">更新提示</div>
+                    <div class="notification-description">应用更新和功能优化</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+            
+            <div class="notification-item">
+                <div class="notification-icon yellow">
+                    <i class="fas fa-bullhorn"></i>
+                </div>
+                <div class="notification-content">
+                    <div class="notification-title">活动公告</div>
+                    <div class="notification-description">节日活动和特别活动</div>
+                </div>
+                <div class="notification-action">
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+        
+        <div class="explanation">
+            注意：为了确保良好的使用体验，部分重要通知（如安全警告）无法关闭。如需更改通知声音或其他系统级通知设置，请前往系统设置中修改。
+        </div>
+    </div>
+    
+    <script>
+        // 简单的通知切换逻辑
+        document.getElementById('master-toggle').addEventListener('change', function() {
+            const allToggles = document.querySelectorAll('.toggle-switch input:not(#master-toggle)');
+            allToggles.forEach(toggle => {
+                toggle.checked = this.checked;
+            });
+        });
+        
+        document.getElementById('study-toggle').addEventListener('change', function() {
+            const timeSettings = document.querySelector('.notification-time');
+            if (this.checked) {
+                timeSettings.style.display = 'flex';
+            } else {
+                timeSettings.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html> 

@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 内容详情</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            background-color: white;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            margin-right: 15px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 20px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .action-button {
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+        
+        .content-banner {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 20px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .content-banner-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .content-banner-overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            padding: 15px;
+            background: linear-gradient(to top, rgba(0,0,0,0.7), transparent);
+            color: white;
+        }
+        
+        .content-title {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+        
+        .content-meta {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            gap: 10px;
+        }
+        
+        .content-meta-item {
+            display: flex;
+            align-items: center;
+        }
+        
+        .content-meta-item i {
+            margin-right: 5px;
+        }
+        
+        .content-section {
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+        
+        .content-heading {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .content-text {
+            font-size: 16px;
+            line-height: 1.6;
+            color: var(--text-color);
+            margin-bottom: 20px;
+        }
+        
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 25px;
+        }
+        
+        .tag {
+            background-color: #f0f5ff;
+            color: var(--primary-color);
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 12px;
+        }
+        
+        .action-bar {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-top: 1px solid var(--border-color);
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+        }
+        
+        .action-button-large {
+            display: flex;
+            align-items: center;
+            color: var(--text-color);
+            font-size: 14px;
+        }
+        
+        .action-button-large i {
+            font-size: 20px;
+            margin-right: 5px;
+        }
+        
+        .related-content-list {
+            padding: 0 15px;
+        }
+        
+        .related-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        
+        .related-title {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .related-more {
+            font-size: 14px;
+            color: var(--primary-color);
+        }
+        
+        .content-cards {
+            display: flex;
+            gap: 15px;
+            overflow-x: auto;
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+        }
+        
+        .content-card {
+            min-width: 160px;
+            background-color: white;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        }
+        
+        .content-card-image {
+            width: 100%;
+            height: 100px;
+            background-color: #f0f5ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .content-card-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .content-card-body {
+            padding: 10px;
+        }
+        
+        .content-card-title {
+            font-size: 14px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+        
+        .content-card-meta {
+            display: flex;
+            align-items: center;
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .content-card-meta i {
+            margin-right: 5px;
+            font-size: 12px;
+        }
+        
+        .recommendation-section {
+            padding: 15px;
+            background-color: #f9f9f9;
+            margin-bottom: 20px;
+        }
+        
+        .recommendation-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .recommendation-reason {
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+        
+        .feedback-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .feedback-button {
+            padding: 8px 15px;
+            background-color: white;
+            border: 1px solid var(--border-color);
+            border-radius: 20px;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+        }
+        
+        .feedback-button i {
+            margin-right: 5px;
+        }
+        
+        .feedback-button.active {
+            background-color: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Header -->
+    <div class="page-header">
+        <a href="javascript:history.back()" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">内容详情</div>
+        <div class="action-buttons">
+            <a href="#" class="action-button">
+                <i class="fas fa-share-alt"></i>
+            </a>
+            <a href="#" class="action-button">
+                <i class="far fa-heart"></i>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Content -->
+    <div class="content">
+        <!-- Content Banner -->
+        <div class="content-banner">
+            <div class="content-banner-image" style="background-color: #4A90E2;"></div>
+            <div class="content-banner-overlay">
+                <div class="content-title">趣味科学：声音的奥秘</div>
+                <div class="content-meta">
+                    <div class="content-meta-item">
+                        <i class="fas fa-calendar"></i>
+                        <span>2023.11.10</span>
+                    </div>
+                    <div class="content-meta-item">
+                        <i class="fas fa-eye"></i>
+                        <span>2,345</span>
+                    </div>
+                    <div class="content-meta-item">
+                        <i class="fas fa-thumbs-up"></i>
+                        <span>128</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Content Section -->
+        <div class="content-section">
+            <div class="content-heading">推荐理由</div>
+            <div class="content-text">
+                基于小朋友的学习兴趣和最近的互动情况，推荐这篇关于声音原理的科普内容。内容生动有趣，包含了互动实验，有助于培养科学思维和探索精神。
+            </div>
+            
+            <div class="tag-container">
+                <div class="tag">科学启蒙</div>
+                <div class="tag">互动实验</div>
+                <div class="tag">声音原理</div>
+                <div class="tag">5-8岁</div>
+            </div>
+        </div>
+        
+        <!-- Action Bar -->
+        <div class="action-bar">
+            <div class="action-button-large">
+                <i class="fas fa-play-circle"></i>
+                <span>开始互动</span>
+            </div>
+            <div class="action-button-large">
+                <i class="far fa-bookmark"></i>
+                <span>收藏</span>
+            </div>
+            <div class="action-button-large">
+                <i class="fas fa-download"></i>
+                <span>下载</span>
+            </div>
+        </div>
+        
+        <!-- Content Details -->
+        <div class="content-section">
+            <div class="content-heading">内容简介</div>
+            <div class="content-text">
+                声音是如何产生的？它是如何传播的？为什么有些声音高有些声音低？在这个趣味科学课程中，小朋友将通过生动的动画和有趣的互动实验，了解声音的基本原理。
+                <br><br>
+                课程包含三个互动实验：自制简易乐器、声音传播观察和音调变化体验。这些实验简单易行，使用家中常见材料即可完成，非常适合亲子共同参与。
+            </div>
+        </div>
+        
+        <!-- Recommendation Section -->
+        <div class="recommendation-section">
+            <div class="recommendation-title">个性化推荐</div>
+            <div class="recommendation-reason">
+                小智注意到小朋友最近对声音和音乐表现出浓厚兴趣，多次提问关于乐器发声的问题。这个内容能够帮助解答疑惑，同时培养科学思维能力。
+            </div>
+            <div class="feedback-buttons">
+                <div class="feedback-button active">
+                    <i class="fas fa-thumbs-up"></i>
+                    <span>喜欢</span>
+                </div>
+                <div class="feedback-button">
+                    <i class="fas fa-thumbs-down"></i>
+                    <span>不感兴趣</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Related Content -->
+        <div class="related-content-list">
+            <div class="related-header">
+                <div class="related-title">相关推荐</div>
+                <div class="related-more">查看全部</div>
+            </div>
+            
+            <div class="content-cards">
+                <div class="content-card">
+                    <div class="content-card-image" style="background-color: #5AC8FA;"></div>
+                    <div class="content-card-body">
+                        <div class="content-card-title">光的奇妙世界</div>
+                        <div class="content-card-meta">
+                            <i class="fas fa-star"></i>
+                            <span>4.9分</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <div class="content-card-image" style="background-color: #FFCC00;"></div>
+                    <div class="content-card-body">
+                        <div class="content-card-title">磁铁的秘密</div>
+                        <div class="content-card-meta">
+                            <i class="fas fa-star"></i>
+                            <span>4.7分</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <div class="content-card-image" style="background-color: #FF9500;"></div>
+                    <div class="content-card-body">
+                        <div class="content-card-title">水的三态变化</div>
+                        <div class="content-card-meta">
+                            <i class="fas fa-star"></i>
+                            <span>4.8分</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="content-card">
+                    <div class="content-card-image" style="background-color: #4A90E2;"></div>
+                    <div class="content-card-body">
+                        <div class="content-card-title">气象观察与记录</div>
+                        <div class="content-card-meta">
+                            <i class="fas fa-star"></i>
+                            <span>4.6分</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

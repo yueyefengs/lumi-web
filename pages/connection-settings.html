@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 连接设置</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+            background-color: white;
+        }
+        
+        .back-button {
+            font-size: 20px;
+            color: var(--primary-color);
+            margin-right: 15px;
+        }
+        
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+        }
+        
+        .connection-section {
+            background-color: white;
+            border-radius: 15px;
+            margin: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        .section-header {
+            padding: 15px;
+            font-size: 16px;
+            font-weight: 600;
+            color: var(--primary-color);
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .section-header .toggle {
+            position: relative;
+            display: inline-block;
+            width: 50px;
+            height: 24px;
+        }
+        
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        
+        .toggle-slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        
+        input:checked + .toggle-slider {
+            background-color: var(--primary-color);
+        }
+        
+        input:checked + .toggle-slider:before {
+            transform: translateX(26px);
+        }
+        
+        .wifi-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        
+        .wifi-item {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .wifi-item:last-child {
+            border-bottom: none;
+        }
+        
+        .wifi-icon {
+            margin-right: 15px;
+            font-size: 18px;
+            color: var(--primary-color);
+        }
+        
+        .wifi-info {
+            flex: 1;
+        }
+        
+        .wifi-name {
+            font-size: 16px;
+            font-weight: 500;
+        }
+        
+        .wifi-status {
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .wifi-signal {
+            color: var(--light-text);
+            font-size: 16px;
+        }
+        
+        .connected {
+            color: var(--primary-color);
+        }
+        
+        .form-group {
+            padding: 15px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        
+        .form-group:last-child {
+            border-bottom: none;
+        }
+        
+        .form-label {
+            display: block;
+            font-size: 14px;
+            color: var(--light-text);
+            margin-bottom: 8px;
+        }
+        
+        .form-control {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 15px;
+        }
+        
+        .token-info {
+            font-size: 12px;
+            color: var(--light-text);
+            padding: 8px 0;
+        }
+        
+        .btn-save {
+            width: 100%;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            padding: 12px;
+            font-size: 15px;
+            font-weight: 500;
+            margin-top: 10px;
+        }
+        
+        .btn-test {
+            background-color: transparent;
+            color: var(--primary-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 8px;
+            padding: 10px;
+            font-size: 14px;
+            width: 80px;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Main Content Area -->
+    <div class="content">
+        <!-- Page Header -->
+        <div class="page-header">
+            <a href="profile.html" class="back-button">
+                <i class="fas fa-chevron-left"></i>
+            </a>
+            <div class="page-title">连接设置</div>
+        </div>
+        
+        <!-- WiFi Settings Section -->
+        <div class="connection-section">
+            <div class="section-header">
+                <span>WiFi连接</span>
+                <label class="toggle">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <ul class="wifi-list">
+                <li class="wifi-item">
+                    <div class="wifi-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="wifi-info">
+                        <div class="wifi-name">Home WiFi</div>
+                        <div class="wifi-status connected">已连接</div>
+                    </div>
+                    <div class="wifi-signal">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                </li>
+                <li class="wifi-item">
+                    <div class="wifi-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="wifi-info">
+                        <div class="wifi-name">Guest Network</div>
+                        <div class="wifi-status">需要密码</div>
+                    </div>
+                    <div class="wifi-signal">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                </li>
+                <li class="wifi-item">
+                    <div class="wifi-icon">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <div class="wifi-info">
+                        <div class="wifi-name">Office Network</div>
+                        <div class="wifi-status">需要密码</div>
+                    </div>
+                    <div class="wifi-signal">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                </li>
+                <li class="wifi-item">
+                    <div class="wifi-icon">
+                        <i class="fas fa-plus-circle"></i>
+                    </div>
+                    <div class="wifi-info">
+                        <div class="wifi-name">添加其他网络</div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+        
+        <!-- AI Model Token Settings -->
+        <div class="connection-section">
+            <div class="section-header">
+                <span>大模型API设置</span>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">大模型类型</label>
+                <select class="form-control">
+                    <option value="openai">OpenAI (GPT系列)</option>
+                    <option value="anthropic">Anthropic Claude</option>
+                    <option value="gemini">Google Gemini</option>
+                    <option value="custom">自定义模型</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">API密钥</label>
+                <div style="display: flex; align-items: center;">
+                    <input type="password" class="form-control" placeholder="输入API密钥">
+                    <button class="btn-test">测试</button>
+                </div>
+                <div class="token-info">
+                    API密钥用于访问大模型服务，请保管好您的密钥信息
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">API端点（高级设置）</label>
+                <input type="text" class="form-control" value="https://api.openai.com/v1">
+                <div class="token-info">
+                    仅在使用自托管模型或自定义服务时需要修改
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <label class="form-label">默认模型</label>
+                <select class="form-control">
+                    <option value="gpt-4o">GPT-4o</option>
+                    <option value="gpt-4-turbo">GPT-4 Turbo</option>
+                    <option value="gpt-3.5-turbo">GPT-3.5 Turbo</option>
+                </select>
+                <div class="token-info">
+                    选择默认使用的模型，不同模型有不同的能力和资费标准
+                </div>
+                <button class="btn-save">保存设置</button>
+            </div>
+        </div>
+        
+        <!-- Bluetooth Settings -->
+        <div class="connection-section">
+            <div class="section-header">
+                <span>蓝牙设置</span>
+                <label class="toggle">
+                    <input type="checkbox" checked>
+                    <span class="toggle-slider"></span>
+                </label>
+            </div>
+            
+            <div class="form-group" style="padding: 15px;">
+                <div style="color: var(--primary-color); font-weight: 500; margin-bottom: 10px;">已配对设备</div>
+                <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                    <i class="fas fa-headphones" style="margin-right: 15px; color: var(--primary-color);"></i>
+                    <div style="flex: 1;">
+                        <div style="font-size: 15px;">小智音箱</div>
+                        <div style="font-size: 12px; color: var(--light-text);">已连接</div>
+                    </div>
+                </div>
+                <button class="btn-save">扫描其他设备</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

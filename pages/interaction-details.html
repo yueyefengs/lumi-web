@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>小智App - 今日互动</title>
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        .page-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .back-button {
+            margin-right: 15px;
+            font-size: 18px;
+            color: var(--text-color);
+        }
+        
+        .page-title {
+            font-size: 18px;
+            font-weight: 600;
+            flex: 1;
+            text-align: center;
+            margin-right: 38px;
+        }
+        
+        .date-header {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .current-date {
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .date-nav {
+            position: absolute;
+            display: flex;
+            align-items: center;
+        }
+        
+        .date-nav.left {
+            left: 15px;
+        }
+        
+        .date-nav.right {
+            right: 15px;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card {
+            background-color: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+        
+        .summary-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin: 0 0 5px 0;
+        }
+        
+        .summary-label {
+            font-size: 14px;
+            color: var(--light-text);
+            margin: 0;
+        }
+        
+        .time-distribution {
+            background-color: white;
+            border-radius: 12px;
+            margin: 0 15px 20px;
+            padding: 15px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .distribution-chart {
+            height: 20px;
+            background-color: #f0f2f5;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 10px;
+            display: flex;
+        }
+        
+        .chart-segment {
+            height: 100%;
+        }
+        
+        .chart-segment.story {
+            background-color: #4E7BF9;
+            width: 40%;
+        }
+        
+        .chart-segment.qa {
+            background-color: #FF9500;
+            width: 30%;
+        }
+        
+        .chart-segment.game {
+            background-color: #34C759;
+            width: 20%;
+        }
+        
+        .chart-segment.other {
+            background-color: #AC8DFD;
+            width: 10%;
+        }
+        
+        .chart-legend {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 13px;
+            margin-bottom: 5px;
+        }
+        
+        .legend-color {
+            width: 10px;
+            height: 10px;
+            border-radius: 2px;
+            margin-right: 5px;
+        }
+        
+        .legend-color.story {
+            background-color: #4E7BF9;
+        }
+        
+        .legend-color.qa {
+            background-color: #FF9500;
+        }
+        
+        .legend-color.game {
+            background-color: #34C759;
+        }
+        
+        .legend-color.other {
+            background-color: #AC8DFD;
+        }
+        
+        .sessions-section {
+            margin: 0 15px 20px;
+        }
+        
+        .session-card {
+            background-color: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+        
+        .session-header {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            border-bottom: 1px solid #f5f5f5;
+        }
+        
+        .session-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            background-color: var(--light-background);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+        }
+        
+        .session-icon i {
+            font-size: 20px;
+            color: var(--primary-color);
+        }
+        
+        .session-info {
+            flex: 1;
+        }
+        
+        .session-title {
+            font-weight: 500;
+            margin: 0 0 3px 0;
+            font-size: 15px;
+        }
+        
+        .session-meta {
+            display: flex;
+            font-size: 12px;
+            color: var(--light-text);
+        }
+        
+        .session-time {
+            margin-right: 10px;
+        }
+        
+        .session-tag {
+            background-color: #f0f2f5;
+            padding: 1px 6px;
+            border-radius: 4px;
+        }
+        
+        .session-content {
+            padding: 15px;
+            color: var(--light-text);
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        
+        .session-actions {
+            display: flex;
+            padding: 10px 15px;
+            border-top: 1px solid #f5f5f5;
+        }
+        
+        .session-action {
+            display: flex;
+            align-items: center;
+            margin-right: 15px;
+            font-size: 13px;
+            color: var(--light-text);
+        }
+        
+        .session-action i {
+            margin-right: 5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- iOS Status Bar -->
+    <div class="status-bar">
+        <div class="time">9:41</div>
+        <div class="icons">
+            <i class="fas fa-signal"></i>
+            <i class="fas fa-wifi"></i>
+            <i class="fas fa-battery-full"></i>
+        </div>
+    </div>
+    
+    <!-- Page Header -->
+    <div class="page-header">
+        <a href="home.html" class="back-button">
+            <i class="fas fa-chevron-left"></i>
+        </a>
+        <div class="page-title">今日互动</div>
+    </div>
+    
+    <!-- Date Navigation -->
+    <div class="date-header">
+        <div class="date-nav left">
+            <i class="fas fa-chevron-left"></i>
+        </div>
+        <div class="current-date">2023年6月18日</div>
+        <div class="date-nav right">
+            <i class="fas fa-chevron-right"></i>
+        </div>
+    </div>
+    
+    <!-- Summary Cards -->
+    <div class="summary-cards">
+        <div class="summary-card">
+            <h3 class="summary-value">7</h3>
+            <p class="summary-label">互动次数</p>
+        </div>
+        <div class="summary-card">
+            <h3 class="summary-value">45分钟</h3>
+            <p class="summary-label">互动总时长</p>
+        </div>
+    </div>
+    
+    <!-- Time Distribution -->
+    <div class="time-distribution">
+        <h3 class="section-title">互动类型分布</h3>
+        <div class="distribution-chart">
+            <div class="chart-segment story"></div>
+            <div class="chart-segment qa"></div>
+            <div class="chart-segment game"></div>
+            <div class="chart-segment other"></div>
+        </div>
+        <div class="chart-legend">
+            <div class="legend-item">
+                <div class="legend-color story"></div>
+                <div>故事 40%</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color qa"></div>
+                <div>问答 30%</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color game"></div>
+                <div>游戏 20%</div>
+            </div>
+            <div class="legend-item">
+                <div class="legend-color other"></div>
+                <div>其他 10%</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Session List -->
+    <div class="sessions-section">
+        <h3 class="section-title">互动详情</h3>
+        
+        <!-- Session 1 -->
+        <div class="session-card">
+            <div class="session-header">
+                <div class="session-icon">
+                    <i class="fas fa-book"></i>
+                </div>
+                <div class="session-info">
+                    <h4 class="session-title">小红帽的故事</h4>
+                    <div class="session-meta">
+                        <div class="session-time">08:30 - 08:42</div>
+                        <div class="session-tag">故事</div>
+                    </div>
+                </div>
+            </div>
+            <div class="session-content">
+                小智讲述了小红帽的故事，并引导小明思考故事中的道理...
+            </div>
+            <div class="session-actions">
+                <div class="session-action">
+                    <i class="fas fa-clock"></i>
+                    <span>12分钟</span>
+                </div>
+                <div class="session-action">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>15条对话</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Session 2 -->
+        <div class="session-card">
+            <div class="session-header">
+                <div class="session-icon">
+                    <i class="fas fa-question-circle"></i>
+                </div>
+                <div class="session-info">
+                    <h4 class="session-title">认识动物</h4>
+                    <div class="session-meta">
+                        <div class="session-time">10:15 - 10:22</div>
+                        <div class="session-tag">问答</div>
+                    </div>
+                </div>
+            </div>
+            <div class="session-content">
+                小明问了关于大象和长颈鹿的问题，小智解释了这些动物的特点和生活习性...
+            </div>
+            <div class="session-actions">
+                <div class="session-action">
+                    <i class="fas fa-clock"></i>
+                    <span>7分钟</span>
+                </div>
+                <div class="session-action">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>8条对话</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Session 3 -->
+        <div class="session-card">
+            <div class="session-header">
+                <div class="session-icon">
+                    <i class="fas fa-gamepad"></i>
+                </div>
+                <div class="session-info">
+                    <h4 class="session-title">猜谜语游戏</h4>
+                    <div class="session-meta">
+                        <div class="session-time">14:20 - 14:35</div>
+                        <div class="session-tag">游戏</div>
+                    </div>
+                </div>
+            </div>
+            <div class="session-content">
+                小智和小明一起玩猜谜语游戏，小明成功猜出了5个谜语...
+            </div>
+            <div class="session-actions">
+                <div class="session-action">
+                    <i class="fas fa-clock"></i>
+                    <span>15分钟</span>
+                </div>
+                <div class="session-action">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>12条对话</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Session 4 -->
+        <div class="session-card">
+            <div class="session-header">
+                <div class="session-icon">
+                    <i class="fas fa-calculator"></i>
+                </div>
+                <div class="session-info">
+                    <h4 class="session-title">数学练习</h4>
+                    <div class="session-meta">
+                        <div class="session-time">16:05 - 16:16</div>
+                        <div class="session-tag">学习</div>
+                    </div>
+                </div>
+            </div>
+            <div class="session-content">
+                小智帮助小明解决了几道简单的加减法题目，并进行了耐心的讲解...
+            </div>
+            <div class="session-actions">
+                <div class="session-action">
+                    <i class="fas fa-clock"></i>
+                    <span>11分钟</span>
+                </div>
+                <div class="session-action">
+                    <i class="fas fa-comment-dots"></i>
+                    <span>9条对话</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 
