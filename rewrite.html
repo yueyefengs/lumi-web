@@ -1,0 +1,641 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>儿童益智玩具 App 原型</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <style>
+        /* 自定义一些基础样式 */
+        body {
+            font-family: sans-serif; /* 使用系统默认字体 */
+            overscroll-behavior-y: contain; /* 防止下拉刷新等行为 */
+        }
+        /* 模拟手机屏幕边框 */
+        .mobile-frame {
+            max-width: 420px; /* 模拟手机宽度 */
+            height: 800px; /* 模拟手机高度 */
+            margin: 2rem auto;
+            border: 1px solid #ccc;
+            border-radius: 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* 隐藏超出部分 */
+            background-color: #f8f9fa; /* 页面背景色 */
+        }
+        .page {
+            display: none; /* 默认隐藏所有页面 */
+            flex-grow: 1; /* 占据剩余空间 */
+            overflow-y: auto; /* 页面内容可滚动 */
+            padding-bottom: 60px; /* 避免内容被底部导航遮挡 */
+        }
+        .page.active {
+            display: block; /* 显示当前活动页面 */
+        }
+        .tab-bar {
+            height: 60px; /* 底部导航高度 */
+            border-top: 1px solid #e5e7eb; /* 分隔线 */
+        }
+        .tab-item.active i,
+        .tab-item.active span {
+            color: #3b82f6; /* 激活状态颜色 */
+        }
+        /* 简单的卡片样式 */
+        .card {
+            background-color: white;
+            border-radius: 0.5rem; /* 8px */
+            padding: 1rem; /* 16px */
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+            margin-bottom: 1rem; /* 16px */
+        }
+        /* 聊天气泡样式 */
+        .chat-bubble {
+            max-width: 75%;
+            padding: 0.5rem 0.75rem; /* 8px 12px */
+            border-radius: 0.75rem; /* 12px */
+            margin-bottom: 0.5rem; /* 8px */
+            word-wrap: break-word; /* 长单词换行 */
+        }
+        .chat-bubble-user {
+            background-color: #dbeafe; /* 蓝色调 */
+            margin-left: auto; /* 用户气泡靠右 */
+            border-bottom-right-radius: 0.25rem; /* 4px */
+        }
+        .chat-bubble-toy {
+            background-color: #e5e7eb; /* 灰色调 */
+            margin-right: auto; /* 玩具气泡靠左 */
+            border-bottom-left-radius: 0.25rem; /* 4px */
+        }
+        /* 设置项区块 */
+        .settings-section {
+            margin-bottom: 1.5rem; /* 24px */
+        }
+        .settings-section-title {
+            font-size: 0.875rem; /* 14px */
+            color: #6b7280; /* 灰色 */
+            margin-bottom: 0.75rem; /* 12px */
+            padding-left: 1rem; /* 16px */
+        }
+        .settings-item {
+            background-color: white;
+            padding: 0.75rem 1rem; /* 12px 16px */
+            border-bottom: 1px solid #f3f4f6; /* 分隔线 */
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .settings-item:first-child {
+             border-top-left-radius: 0.5rem;
+             border-top-right-radius: 0.5rem;
+        }
+        .settings-item:last-child {
+             border-bottom-left-radius: 0.5rem;
+             border-bottom-right-radius: 0.5rem;
+             border-bottom: none;
+        }
+        /* 简单的 Switch 模拟 */
+        .switch {
+            position: relative;
+            display: inline-block;
+            width: 44px;
+            height: 24px;
+        }
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #ccc;
+            transition: .4s;
+            border-radius: 24px;
+        }
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 2px;
+            bottom: 2px;
+            background-color: white;
+            transition: .4s;
+            border-radius: 50%;
+        }
+        input:checked + .slider {
+            background-color: #2563eb;
+        }
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+         /* 简单的 Tag 模拟 */
+        .tag {
+            display: inline-block;
+            background-color: #e5e7eb;
+            color: #374151;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-size: 0.875rem;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .tag-editable {
+             cursor: pointer;
+        }
+        .tag-add {
+             background-color: #dbeafe;
+             color: #1e40af;
+        }
+
+    </style>
+</head>
+<body class="bg-gray-100">
+
+    <div class="mobile-frame">
+        <main class="flex-grow overflow-hidden relative">
+            <div id="page-home" class="page active p-4">
+                <div class="flex justify-between items-center mb-4 px-2 text-xs text-gray-600">
+                    <div class="flex items-center space-x-1">
+                        <i class="fas fa-wifi text-green-500"></i>
+                        <span>已连接</span>
+                    </div>
+                    <div class="flex items-center space-x-2">
+                        <span>已用 30min / 限制 60min</span>
+                        <div class="flex items-center space-x-1">
+                           <i class="fas fa-battery-three-quarters text-green-500"></i>
+                           <span>85%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mb-6">
+                    <div class="flex justify-between items-center mb-2">
+                        <h2 class="text-lg font-semibold text-gray-800">最近互动</h2>
+                        <button onclick="navigateTo('page-chat')" class="text-sm text-blue-500 hover:text-blue-700">查看更多 &gt;</button>
+                    </div>
+                    <div class="space-y-3">
+                        <div class="card flex justify-between items-center">
+                            <div>
+                                <h3 class="font-medium text-gray-800">恐龙知识问答</h3>
+                                <p class="text-xs text-gray-500">今天 10:30</p>
+                            </div>
+                            <i class="fas fa-question-circle text-yellow-500 text-xl"></i>
+                        </div>
+                        <div class="card flex justify-between items-center">
+                            <div>
+                                <h3 class="font-medium text-gray-800">讲个睡前故事</h3>
+                                <p class="text-xs text-gray-500">昨天 20:15</p>
+                            </div>
+                            <i class="fas fa-microphone-alt text-blue-500 text-xl"></i>
+                        </div>
+                         <div class="card flex justify-between items-center">
+                            <div>
+                                <h3 class="font-medium text-gray-800">唱首儿歌</h3>
+                                <p class="text-xs text-gray-500">昨天 15:05</p>
+                            </div>
+                            <i class="fas fa-music text-purple-500 text-xl"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-around items-center">
+                    <button class="flex flex-col items-center text-center text-gray-700 hover:text-blue-500 transition-colors">
+                        <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow mb-1">
+                            <i class="fas fa-pause text-xl"></i>
+                        </div>
+                        <span class="text-xs">暂停</span>
+                    </button>
+                    <button class="flex flex-col items-center text-center text-gray-700 hover:text-blue-500 transition-colors">
+                         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow mb-1">
+                            <i class="fas fa-volume-mute text-xl"></i>
+                        </div>
+                        <span class="text-xs">静音</span>
+                    </button>
+                    <button class="flex flex-col items-center text-center text-gray-700 hover:text-red-500 transition-colors">
+                         <div class="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow mb-1">
+                            <i class="fas fa-power-off text-xl"></i>
+                        </div>
+                        <span class="text-xs">关机</span>
+                    </button>
+                </div>
+            </div>
+
+            <div id="page-chat" class="page">
+                 <div class="sticky top-0 bg-white shadow-sm z-10 h-12 flex items-center justify-center border-b border-gray-200">
+                    <h1 class="text-lg font-semibold text-gray-800">聊天记录</h1>
+                </div>
+                <div class="p-4 space-y-4">
+                    <div class="text-center my-4">
+                        <span class="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">--- 2025年4月24日 ---</span>
+                    </div>
+                    <div class="flex flex-col">
+                        <div class="chat-bubble chat-bubble-user">
+                            你好呀！今天天气怎么样？
+                            <div class="text-xs text-gray-500 mt-1 text-right">10:35</div>
+                        </div>
+                        <div class="chat-bubble chat-bubble-toy">
+                            你好！今天天气晴朗，阳光明媚！适合出去玩哦。☀️
+                            <div class="text-xs text-gray-500 mt-1 text-left">10:36</div>
+                        </div>
+                         <div class="chat-bubble chat-bubble-user">
+                            给我讲个关于恐龙的故事吧。
+                            <div class="text-xs text-gray-500 mt-1 text-right">10:38</div>
+                        </div>
+                        <div class="chat-bubble chat-bubble-toy">
+                            好的！很久很久以前，地球上生活着巨大的恐龙... 🦖
+                            <div class="text-xs text-gray-500 mt-1 text-left">10:39</div>
+                        </div>
+                    </div>
+                     <div class="text-center my-4">
+                        <span class="text-xs text-gray-500 bg-gray-200 px-2 py-1 rounded-full">--- 2025年4月23日 ---</span>
+                    </div>
+                     <div class="flex flex-col">
+                        <div class="chat-bubble chat-bubble-user">
+                            晚安啦！
+                            <div class="text-xs text-gray-500 mt-1 text-right">21:00</div>
+                        </div>
+                        <div class="chat-bubble chat-bubble-toy">
+                            晚安，祝你做个好梦！🌙
+                            <div class="text-xs text-gray-500 mt-1 text-left">21:01</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="page-profile" class="page bg-gray-100">
+                 <div class="bg-white p-4 shadow-sm mb-4">
+                    <div class="flex items-center space-x-4">
+                        <img src="https://placehold.co/64x64/e0e0e0/757575?text=头像" alt="用户头像" class="w-16 h-16 rounded-full">
+                        <div>
+                            <h2 class="text-xl font-semibold text-gray-800">小明</h2>
+                            <div class="flex items-center space-x-2 text-xs text-gray-500 mt-1">
+                                <span class="flex items-center"><i class="fas fa-wifi text-green-500 mr-1"></i>已连接</span>
+                                <span class="flex items-center"><i class="fas fa-battery-three-quarters text-green-500 mr-1"></i>85%</span>
+                            </div>
+                        </div>
+                    </div>
+                 </div>
+
+                 <div class="px-4 mb-4">
+                     <div class="card grid grid-cols-3 gap-4 text-center text-sm">
+                         <div>
+                             <div class="text-gray-500">使用限制</div>
+                             <div class="font-medium text-gray-800">60 分钟</div>
+                         </div>
+                         <div>
+                             <div class="text-gray-500">孩子年龄</div>
+                             <div class="font-medium text-gray-800">5 岁</div>
+                         </div>
+                         <div>
+                             <div class="text-gray-500">固件版本</div>
+                             <div class="font-medium text-gray-800">V1.2.3</div>
+                         </div>
+                     </div>
+                 </div>
+
+
+                 <div class="space-y-6 pb-4">
+                     <div class="settings-section">
+                         <h3 class="settings-section-title">个人信息</h3>
+                         <div class="mx-4 rounded-lg overflow-hidden shadow-sm">
+                             <div class="settings-item">
+                                 <label for="name" class="text-gray-700">姓名</label>
+                                 <input type="text" id="name" value="小明" class="text-right text-gray-500 border-none focus:ring-0 p-0">
+                             </div>
+                             <div class="settings-item">
+                                 <label for="age" class="text-gray-700">年龄</label>
+                                 <input type="number" id="age" value="5" class="text-right text-gray-500 border-none focus:ring-0 p-0 w-16">
+                             </div>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">性别</span>
+                                 <div class="flex space-x-4">
+                                     <label class="flex items-center space-x-1 text-sm">
+                                         <input type="radio" name="gender" value="male" checked class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                         <span>男</span>
+                                     </label>
+                                     <label class="flex items-center space-x-1 text-sm">
+                                         <input type="radio" name="gender" value="female" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                         <span>女</span>
+                                     </label>
+                                 </div>
+                             </div>
+                              <div class="settings-item">
+                                 <label for="hobbies" class="text-gray-700">爱好</label>
+                                 <div class="text-right text-gray-500">
+                                     <span class="tag">画画</span>
+                                     <span class="tag">积木</span>
+                                     <i class="fas fa-chevron-right text-xs"></i>
+                                 </div>
+                             </div>
+                             <div class="settings-item">
+                                 <label for="language" class="text-gray-700">语言偏好</label>
+                                 <select id="language" class="text-right text-gray-500 border-none focus:ring-0 p-0 bg-transparent">
+                                     <option>中文</option>
+                                     <option>English</option>
+                                 </select>
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="settings-section">
+                         <h3 class="settings-section-title">角色设定</h3>
+                         <div class="mx-4 rounded-lg overflow-hidden shadow-sm">
+                            <div class="settings-item">
+                                 <span class="text-gray-700">角色模板</span>
+                                 <span class="text-gray-500">默认伙伴 <i class="fas fa-chevron-right text-xs ml-1"></i></span>
+                             </div>
+                             <div class="settings-item">
+                                 <label for="role-nickname" class="text-gray-700">昵称</label>
+                                 <input type="text" id="role-nickname" value="小智" class="text-right text-gray-500 border-none focus:ring-0 p-0">
+                             </div>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">音色选择</span>
+                                 <div class="flex space-x-2">
+                                     <button class="px-2 py-1 text-xs rounded bg-blue-100 text-blue-700">童声</button>
+                                     <button class="px-2 py-1 text-xs rounded bg-gray-100 text-gray-600">男声</button>
+                                     <button class="px-2 py-1 text-xs rounded bg-gray-100 text-gray-600">女声</button>
+                                 </div>
+                             </div>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">简介</span>
+                                 <span class="text-gray-500">我是你的好朋友... <i class="fas fa-chevron-right text-xs ml-1"></i></span>
+                             </div>
+                             <div class="settings-item">
+                                 <label for="llm-platform-role" class="text-gray-700">语言模型平台</label>
+                                 <select id="llm-platform-role" class="text-right text-gray-500 border-none focus:ring-0 p-0 bg-transparent">
+                                     <option>DeepSeek</option>
+                                     <option>OpenAI</option>
+                                 </select>
+                             </div>
+                              <div class="settings-item">
+                                 <label for="llm-model-role" class="text-gray-700">默认模型</label>
+                                 <select id="llm-model-role" class="text-right text-gray-500 border-none focus:ring-0 p-0 bg-transparent">
+                                     <option>deepseek-coder</option>
+                                     <option>gpt-4-turbo</option>
+                                 </select>
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="settings-section">
+                         <h3 class="settings-section-title">连接设置</h3>
+                          <div class="mx-4 rounded-lg overflow-hidden shadow-sm">
+                              <div class="settings-item">
+                                 <span class="text-gray-700">当前 Wi-Fi</span>
+                                 <span class="text-gray-500"><i class="fas fa-wifi text-blue-500 mr-1"></i> MyHomeWiFi <i class="fas fa-chevron-right text-xs ml-1"></i></span>
+                             </div>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">历史连接记录</span>
+                                 <i class="fas fa-chevron-down text-xs text-gray-500"></i>
+                             </div>
+                             </div>
+                     </div>
+
+                      <div class="settings-section">
+                         <h3 class="settings-section-title">大模型设置</h3>
+                         <div class="mx-4 rounded-lg overflow-hidden shadow-sm">
+                             <div class="settings-item">
+                                 <span class="text-gray-700">启用大模型</span>
+                                 <label class="switch">
+                                     <input type="checkbox" checked>
+                                     <span class="slider"></span>
+                                 </label>
+                             </div>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">模型平台</span>
+                                  <div class="flex space-x-4">
+                                     <label class="flex items-center space-x-1 text-sm">
+                                         <input type="radio" name="llm-platform" value="deepseek" checked class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                         <span>DeepSeek</span>
+                                     </label>
+                                     <label class="flex items-center space-x-1 text-sm">
+                                         <input type="radio" name="llm-platform" value="openai" class="focus:ring-blue-500 h-4 w-4 text-blue-600 border-gray-300">
+                                         <span>OpenAI</span>
+                                     </label>
+                                 </div>
+                             </div>
+                             <div class="settings-item">
+                                 <label for="api-key" class="text-gray-700">API Key</label>
+                                 <input type="password" id="api-key" value="********" class="text-right text-gray-500 border-none focus:ring-0 p-0">
+                             </div>
+                             <div class="settings-item">
+                                 <label for="llm-model-default" class="text-gray-700">默认模型</label>
+                                 <select id="llm-model-default" class="text-right text-gray-500 border-none focus:ring-0 p-0 bg-transparent">
+                                     <option>deepseek-coder</option>
+                                     <option>gpt-4-turbo</option>
+                                 </select>
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="settings-section">
+                         <h3 class="settings-section-title flex items-center justify-between">
+                             <span>家长控制</span>
+                             <button onclick="showPinModal()" class="text-blue-500 text-xs mr-4 flex items-center"><i class="fas fa-lock mr-1"></i>需要 PIN</button>
+                         </h3>
+                         <div id="parental-controls-content" class="mx-4 rounded-lg overflow-hidden shadow-sm bg-gray-100 p-4 text-center text-gray-500">
+                             <i class="fas fa-lock text-2xl mb-2"></i>
+                             <p>点击右上角解锁以编辑设置</p>
+                         </div>
+                         <div id="parental-controls-settings" class="mx-4 rounded-lg overflow-hidden shadow-sm hidden">
+                            <div class="settings-item">
+                                <label for="usage-limit" class="text-gray-700">每日使用上限</label>
+                                <div class="flex items-center space-x-2">
+                                    <input type="range" id="usage-limit" min="15" max="120" value="60" step="15" class="w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer dark:bg-gray-700">
+                                    <span class="text-sm text-gray-500 w-12 text-right">60 分钟</span>
+                                </div>
+                            </div>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">使用 30 分钟提醒休息</span>
+                                 <label class="switch">
+                                     <input type="checkbox" checked>
+                                     <span class="slider"></span>
+                                 </label>
+                             </div>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">禁用时段</span>
+                                 <div class="text-right text-gray-500">
+                                     <input type="time" value="21:00" class="border-none focus:ring-0 p-0 text-sm"> -
+                                     <input type="time" value="07:00" class="border-none focus:ring-0 p-0 text-sm">
+                                 </div>
+                             </div>
+                             <div class="settings-item flex-col items-start">
+                                 <label class="text-gray-700 mb-2">屏蔽关键词</label>
+                                 <div>
+                                     <span class="tag tag-editable">暴力 <i class="fas fa-times text-xs ml-1"></i></span>
+                                     <span class="tag tag-editable">恐怖 <i class="fas fa-times text-xs ml-1"></i></span>
+                                     <button class="tag tag-add"><i class="fas fa-plus text-xs"></i> 添加</button>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+
+                     <div class="settings-section">
+                         <h3 class="settings-section-title">支持与关于</h3>
+                         <div class="mx-4 rounded-lg overflow-hidden shadow-sm">
+                             <div class="settings-item">
+                                 <label for="app-language" class="text-gray-700">应用语言</label>
+                                 <select id="app-language" class="text-right text-gray-500 border-none focus:ring-0 p-0 bg-transparent">
+                                     <option>中文</option>
+                                     <option>English</option>
+                                 </select>
+                             </div>
+                             <div class="settings-item">
+                                 <label for="region" class="text-gray-700">地区</label>
+                                 <select id="region" class="text-right text-gray-500 border-none focus:ring-0 p-0 bg-transparent">
+                                     <option>中国大陆</option>
+                                     <option>美国</option>
+                                 </select>
+                             </div>
+                             <a href="#" class="settings-item">
+                                 <span class="text-gray-700">常见问题 (FAQ)</span>
+                                 <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+                             </a>
+                             <button class="settings-item w-full text-left">
+                                 <span class="text-gray-700">联系客服</span>
+                                 <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+                             </button>
+                             <a href="#" class="settings-item">
+                                 <span class="text-gray-700">隐私政策</span>
+                                 <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+                             </a>
+                             <div class="settings-item">
+                                 <span class="text-gray-700">应用版本</span>
+                                 <span class="text-gray-500">1.0.0 (Build 123)</span>
+                             </div>
+                              <button class="settings-item w-full text-left">
+                                 <span class="text-gray-700">检查更新</span>
+                                 <i class="fas fa-chevron-right text-xs text-gray-400"></i>
+                             </button>
+                         </div>
+                     </div>
+                 </div>
+            </div>
+        </main>
+
+        <nav class="tab-bar fixed bottom-0 left-0 right-0 bg-white flex justify-around items-center max-w-[420px] mx-auto border-t border-gray-200" style="bottom: calc(env(safe-area-inset-bottom, 0px) + 0px);">
+            <button onclick="navigateTo('page-home')" class="tab-item flex flex-col items-center justify-center text-gray-600 hover:text-blue-500 pt-1 w-1/3 active">
+                <i class="fas fa-home text-xl mb-1"></i>
+                <span class="text-xs">首页</span>
+            </button>
+            <button onclick="navigateTo('page-chat')" class="tab-item flex flex-col items-center justify-center text-gray-600 hover:text-blue-500 pt-1 w-1/3">
+                <i class="fas fa-comments text-xl mb-1"></i>
+                <span class="text-xs">聊天记录</span>
+            </button>
+            <button onclick="navigateTo('page-profile')" class="tab-item flex flex-col items-center justify-center text-gray-600 hover:text-blue-500 pt-1 w-1/3">
+                <i class="fas fa-user-circle text-xl mb-1"></i>
+                <span class="text-xs">个人中心</span>
+            </button>
+        </nav>
+    </div>
+
+    <div id="pin-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white p-6 rounded-lg shadow-xl w-80">
+            <h3 class="text-lg font-semibold mb-4 text-center">输入家长控制 PIN 码</h3>
+            <input type="password" pattern="[0-9]*" inputmode="numeric" maxlength="4" class="w-full border border-gray-300 rounded p-2 text-center text-xl tracking-[1em]" placeholder="----">
+            <div class="flex justify-end mt-4 space-x-2">
+                 <button onclick="hidePinModal()" class="px-4 py-2 text-sm rounded bg-gray-200 hover:bg-gray-300">取消</button>
+                 <button onclick="unlockParentalControls()" class="px-4 py-2 text-sm rounded bg-blue-500 text-white hover:bg-blue-600">确认</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        const pages = document.querySelectorAll('.page');
+        const tabItems = document.querySelectorAll('.tab-item');
+        const pinModal = document.getElementById('pin-modal');
+        const parentalControlsContent = document.getElementById('parental-controls-content');
+        const parentalControlsSettings = document.getElementById('parental-controls-settings');
+
+        // 页面导航函数
+        function navigateTo(pageId) {
+            // 隐藏所有页面
+            pages.forEach(page => {
+                page.classList.remove('active');
+            });
+            // 显示目标页面
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.classList.add('active');
+                // 滚动到页面顶部
+                targetPage.scrollTop = 0;
+            }
+
+            // 更新 Tab 激活状态
+            tabItems.forEach(item => {
+                item.classList.remove('active');
+                // 如果按钮对应的页面是当前页面，则添加 active 类
+                if (item.getAttribute('onclick').includes(pageId)) {
+                    item.classList.add('active');
+                }
+            });
+        }
+
+        // 显示 PIN 码弹窗
+        function showPinModal() {
+            if (pinModal) {
+                pinModal.classList.remove('hidden');
+                const input = pinModal.querySelector('input');
+                if (input) input.value = ''; // 清空输入框
+                if (input) input.focus();
+            }
+        }
+
+        // 隐藏 PIN 码弹窗
+        function hidePinModal() {
+             if (pinModal) {
+                pinModal.classList.add('hidden');
+            }
+        }
+
+        // 解锁家长控制 (模拟)
+        function unlockParentalControls() {
+            // 在实际应用中，这里需要验证 PIN 码
+            console.log("PIN 码已输入 (未验证), 解锁家长控制区域");
+            hidePinModal();
+            if (parentalControlsContent && parentalControlsSettings) {
+                parentalControlsContent.classList.add('hidden'); // 隐藏提示信息
+                parentalControlsSettings.classList.remove('hidden'); // 显示设置项
+            }
+             // 找到并更新家长控制区块标题旁的按钮/文字
+            const lockButton = document.querySelector('.settings-section-title button');
+            if (lockButton) {
+                lockButton.innerHTML = '<i class="fas fa-lock-open mr-1"></i>已解锁';
+                lockButton.classList.remove('text-blue-500');
+                lockButton.classList.add('text-green-500');
+                // 可以考虑添加一个重新锁定的功能
+            }
+        }
+
+        // 初始化：确保首页是激活状态 (虽然 HTML 中已设置，但 JS 里再确认一次)
+        document.addEventListener('DOMContentLoaded', () => {
+            navigateTo('page-home');
+
+            // 为滑块添加数值显示更新 (示例)
+            const usageLimitSlider = document.getElementById('usage-limit');
+            if (usageLimitSlider) {
+                const displaySpan = usageLimitSlider.nextElementSibling;
+                usageLimitSlider.addEventListener('input', (event) => {
+                    if (displaySpan) {
+                        displaySpan.textContent = `${event.target.value} 分钟`;
+                    }
+                });
+                // 初始化显示
+                 if (displaySpan) {
+                     displaySpan.textContent = `${usageLimitSlider.value} 分钟`;
+                 }
+            }
+        });
+
+    </script>
+
+</body>
+</html>
